@@ -6,6 +6,7 @@ from flask import Flask
 from flask_cors import CORS
 
 from api.exceptions.notfound import NotFoundException
+from method_creator import MethodCreator
 
 from .exceptions.badrequest import BadRequestException
 from .exceptions.validation import ValidationException
@@ -35,7 +36,7 @@ def getenv_bool(name: str, default_value: bool | None = None) -> bool:
         raise ValueError(f'Invalid value `{value}` for variable `{name}`')
     return value in true_
 
-def create_app(test_config=None):
+def create_app(method_creator: MethodCreator, test_config=None):
     # Create and configure app
     # static_folder = os.path.join(os.path.dirname(__file__), '..', 'public')
     app = Flask(__name__)
@@ -99,6 +100,7 @@ def create_app(test_config=None):
             use_preprocessed_files=False,
             import_directory=app.config.get('IMPORT_DIRECTORY')
         )
+        app.method_creator = method_creator
 
 
     # Register Routes
