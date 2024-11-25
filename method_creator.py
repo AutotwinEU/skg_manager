@@ -10,7 +10,7 @@ class MethodCreator(ABC):
     """
 
     @abstractmethod
-    def factory_method(self, current_app, is_simulation_data: Optional[bool] = None):
+    def factory_method(self, config, is_simulation_data: Optional[bool] = None):
         """
         Note that the Creator may also provide some default implementation of
         the factory method.
