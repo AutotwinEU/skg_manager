@@ -9,24 +9,11 @@ import os
 def get_methods(is_simulation_data: Optional[bool] = None) -> Methods:
     if is_simulation_data is None:
         is_simulation_data = get_is_simulation_data()
-    if is_simulation_data:
-        return Methods(config=current_app.promg_sim_config,
-                       is_simulated_data=True,
-                       input_path=os.path.join(os.getcwd(), "data", "simulation", "raw"),
-                       file_suffix="sim",
-                       is_spanish=False,
-                       drop_duplicates=False,
-                       filter_kits=False
-                       )
-    else:
-        return Methods(config=current_app.promg_config,
-                       is_simulated_data=False,
-                       input_path=os.path.join(os.getcwd(), "data", "groundtruth", "raw"),
-                       file_suffix="",
-                       is_spanish=False,
-                       drop_duplicates=False,
-                       filter_kits=True
-                       )
+
+    config = current_app.promg_sim_config if is_simulation_data else current_app.config
+    methods = current_app.method_creator.factory_method(current_app=config,
+                                                       is_simulation_data=is_simulation_data)
+    return methods
 
 
 def get_is_simulation_data():
@@ -36,6 +23,7 @@ def get_is_simulation_data():
     else:
         is_simulation_data = False
     return is_simulation_data
+
 
 def get_namespace():
     requested_data = request.args.get('namespace')
