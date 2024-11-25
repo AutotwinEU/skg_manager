@@ -1,4 +1,6 @@
 from abc import ABC, abstractmethod
+from typing import Optional
+
 
 class MethodCreator(ABC):
     """
@@ -8,7 +10,7 @@ class MethodCreator(ABC):
     """
 
     @abstractmethod
-    def factory_method(self):
+    def factory_method(self, current_app, is_simulation_data: Optional[bool] = None):
         """
         Note that the Creator may also provide some default implementation of
         the factory method.
@@ -32,3 +34,60 @@ class MethodCreator(ABC):
 
         return result
 
+
+class Methods(ABC):
+    @abstractmethod
+    def get_defined_file_names(self):
+        pass
+
+    @abstractmethod
+    def preprocess_files(self):
+        pass
+
+    @abstractmethod
+    def clear_db(self):
+        pass
+
+    @abstractmethod
+    def get_imported_logs(self):
+        pass
+
+    @abstractmethod
+    def get_model_ids(self):
+        pass
+
+    @abstractmethod
+    def get_event_log(self, entity_type):
+        pass
+
+    @abstractmethod
+    def load_data(self):
+        pass
+
+    @abstractmethod
+    def filter_record_layer(self, entity_types, start_date, end_date):
+        pass
+
+    @abstractmethod
+    def delete_data(self, logs=None):
+        pass
+
+    @abstractmethod
+    def transform_data(self):
+        pass
+
+    @abstractmethod
+    def get_statistics(self):
+        pass
+
+    @abstractmethod
+    def get_timespan(self):
+        pass
+
+    @abstractmethod
+    def get_records_timespan(self):
+        pass
+
+    @abstractmethod
+    def add_performance_metrics(self):
+        pass
