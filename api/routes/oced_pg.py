@@ -2,9 +2,9 @@ import os
 import shutil
 from flask import Blueprint, make_response
 
-from api.exceptions.exception_handler import db_exception_handler
-from api.util.util import get_methods, get_namespace, get_entity_types_list, get_timespan
-from api.util.cds_manager import request_ground_truth_files_from_cds
+from ..exceptions.exception_handler import db_exception_handler
+from ..util.util import get_methods, get_namespace, get_entity_types_list, get_timespan
+from ..util.cds_manager import request_ground_truth_files_from_cds
 
 oced_pg_routes = Blueprint("ocedpg", __name__, url_prefix="/oced_pg")
 

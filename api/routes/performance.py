@@ -1,7 +1,7 @@
 from flask import Blueprint, current_app, make_response, json
-from api.exceptions.exception_handler import db_exception_handler
+from ..exceptions.exception_handler import db_exception_handler
 
-from api.util.util import get_methods
+from ..util.util import get_methods
 
 # Define the performance_routes blueprint
 performance_routes = Blueprint('performance', __name__, url_prefix='/performance')

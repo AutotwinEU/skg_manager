@@ -3,8 +3,8 @@ import json
 
 from flask import Blueprint, jsonify, make_response
 
-from api.exceptions.exception_handler import db_exception_handler
-from api.util.util import get_methods
+from ..exceptions.exception_handler import db_exception_handler
+from ..util.util import get_methods
 db_manager_routes = Blueprint("db_manager", __name__, url_prefix="/db_manager")
 
 

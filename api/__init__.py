@@ -5,7 +5,7 @@ import os
 from flask import Flask
 from flask_cors import CORS
 
-from api.exceptions.notfound import NotFoundException
+from .exceptions.notfound import NotFoundException
 from method_creator import MethodCreator
 
 from .exceptions.badrequest import BadRequestException
