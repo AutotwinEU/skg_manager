@@ -11,7 +11,7 @@ def get_methods(is_simulation_data: Optional[bool] = None) -> Methods:
         is_simulation_data = get_is_simulation_data()
 
     config = current_app.promg_sim_config if is_simulation_data else current_app.config
-    methods = current_app.method_creator.factory_method(current_app=config,
+    methods = current_app.method_creator.factory_method(config=config,
                                                        is_simulation_data=is_simulation_data)
     return methods
 
