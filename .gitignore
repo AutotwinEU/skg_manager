@@ -1,0 +1,9 @@
+/data/
+.idea
+*.pyc
+*.csv
+/*keycloak.json
+/venv/
+config.yaml
+/docker/
+docker-compose.yml
