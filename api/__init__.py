@@ -6,7 +6,7 @@ from flask import Flask
 from flask_cors import CORS
 
 from .exceptions.notfound import NotFoundException
-from method_creator import MethodCreator
+from ..usecase_module.method_creator import MethodCreator
 
 from .exceptions.badrequest import BadRequestException
 from .exceptions.validation import ValidationException
