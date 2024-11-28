@@ -1,5 +1,5 @@
-from src.skg_manager.api.router.interface_routers.oced_pg_router_interface import OcedPgRouterInterface
-from src.skg_manager.api.router.router_result import Result
+from ....api.router.interface_routers.oced_pg_router_interface import OcedPgRouterInterface
+from ....api.router.router_result import Result
 
 
 def not_implemented():

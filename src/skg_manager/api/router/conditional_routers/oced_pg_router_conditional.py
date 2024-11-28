@@ -1,6 +1,6 @@
-from src.skg_manager.api.router.interface_routers.oced_pg_router_interface import OcedPgRouterInterface
-from src.skg_manager.api.router.route_data_extractors import extract_is_simulation_data
-from src.skg_manager.api.router.router_result import Result
+from ....api.router.interface_routers.oced_pg_router_interface import OcedPgRouterInterface
+from ....api.router.route_data_extractors import extract_is_simulation_data
+from ....api.router.router_result import Result
 
 
 class ConditionalOcedPGRouter(OcedPgRouterInterface):

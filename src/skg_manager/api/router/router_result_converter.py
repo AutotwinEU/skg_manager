@@ -1,6 +1,6 @@
 from flask import Response, jsonify, make_response
 
-from src.skg_manager.api.router.router_result import Result
+from ....api.router.router_result import Result
 
 
 def convert_result_into_response(result: Result) -> Response:

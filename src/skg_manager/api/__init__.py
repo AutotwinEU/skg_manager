@@ -9,7 +9,7 @@ from flask_cors import CORS
 from promg import Configuration
 
 ## ======================================================
-from src.skg_manager.api.swagger.swagger import swagger_ui_blueprint
+from ....api.swagger.swagger import swagger_ui_blueprint
 from .exceptions.badrequest import BadRequestException
 from .exceptions.validation import ValidationException
 ## ======================================================
