@@ -101,7 +101,7 @@
         }
       }
     },
-    "/connection": {
+    "/db_manager/test_connection": {
       "get": {
         "tags": [
           "Status"
@@ -244,11 +244,7 @@
             "in": "path",
             "description": "entity type for which event log is requested",
             "required": true,
-            "type": "string",
-            "enum": [
-              "Run",
-              "Kit"
-            ]
+            "type": "string"
           }
         ],
         "responses": {

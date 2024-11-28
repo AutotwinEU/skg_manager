@@ -1,10 +1,12 @@
 import json
 import os
 from typing import List, Dict, Union
-from flask import current_app
 
 import pandas as pd
 import requests
+from flask import current_app
+
+from api.handlers.temp_dir_handler import get_temp_dir
 
 
 def read_ksjon() -> Dict[str, Union[str, Dict[str, str]]]:
@@ -110,20 +112,22 @@ def create_file_name(file_cds: str) -> str:
     return file_name
 
 
-def request_ground_truth_files_from_cds(already_imported_logs: List[str], defined_files: List[str], temp_dir: os.path,
-                                        namespace):
+def get_files_from_cds(namespace, already_imported_logs: List[str], defined_files: List[str]):
     """ Method that determines the files to be retrieved and requests these files
 
     :param already_imported_logs: List of names ensuring we are not re-retrieving double files
     :param defined_files: List of file names that are defined in the data set description
         If a file is retrieved that is not defined a ValueError is thrown
     :param temp_dir: the directory where the files should be temporarily stored
-    @param namespace:
+    @param default_namespace:
+    @param route_data:
     :return: None
 
     :raises :class:`ValueError`: if one of the files in the CDS is not defined to be imported into the SKG"
 
     """
+
+    temp_dir = get_temp_dir()
     token = get_edm_token(read_ksjon())
     files_in_cds = get_file_names_of_cds(token, namespace=namespace)
 
