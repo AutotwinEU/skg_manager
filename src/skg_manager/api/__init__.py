@@ -9,7 +9,7 @@ from flask_cors import CORS
 from promg import Configuration
 
 ## ======================================================
-from ....api.swagger.swagger import swagger_ui_blueprint
+from .swagger import swagger_ui_blueprint
 from .exceptions.badrequest import BadRequestException
 from .exceptions.validation import ValidationException
 ## ======================================================
@@ -24,6 +24,7 @@ from .router.stub_routers.db_manager_router_stub import DatabaseManagerRouterStu
 from .router.stub_routers.oced_pg_router_stub import OcedPgRouterStub
 from .router.stub_routers.performance_router_stub import PerformanceRouterStub
 from .router.stub_routers.use_case_router_stub import UseCaseRouterStub
+
 
 
 def init_promg_configuration(semantic_header_path,

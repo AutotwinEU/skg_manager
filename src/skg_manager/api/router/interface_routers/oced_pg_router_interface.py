@@ -1,6 +1,6 @@
 from abc import ABC, abstractmethod
 
-from ...router.router_result import Result
+from skg_manager import Result
 
 
 class OcedPgRouterInterface(ABC):
