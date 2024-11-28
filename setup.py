@@ -22,7 +22,7 @@ setup(
     version=str(verstr),
     description='Pyhton library to build a generic skg manager api and some generic functions',
     author='A. Swevels, D.Fahland',
-    python_requires='>=3.10',
+    python_requires='>=3.8',
     install_requires=['neo4j', 'numpy', 'pandas', 'promg', 'requests', 'flask-swagger-ui', 'flask'],
     license='GPL 3.0',
     long_description=long_description,
