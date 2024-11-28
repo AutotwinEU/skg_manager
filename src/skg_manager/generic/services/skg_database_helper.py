@@ -3,10 +3,10 @@ from typing import List, Dict, Optional
 from promg import DatabaseConnection
 from promg.modules.db_management import DBManagement
 
-from src.skg_manager.generic.queries.event_log_query_library import EventLogExtractorQueryLibrary as event_log_ql
-from src.skg_manager.generic.queries.index_query_library import IndexQueryLibrary as iql
-from src.skg_manager.generic.queries.statistics_query_library import StatisticsQueryLibrary as sql
-from src.skg_manager.generic.service_interfaces.db_manager_interface import DatabaseManagerInterface
+from ..queries.event_log_query_library import EventLogExtractorQueryLibrary as event_log_ql
+from ..queries.index_query_library import IndexQueryLibrary as iql
+from ..queries.statistics_query_library import StatisticsQueryLibrary as sql
+from ..service_interfaces.db_manager_interface import DatabaseManagerInterface
 
 
 class SKGDatabaseHelper(DBManagement, DatabaseManagerInterface):

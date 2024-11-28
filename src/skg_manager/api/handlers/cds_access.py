@@ -6,7 +6,7 @@ import pandas as pd
 import requests
 from flask import current_app
 
-from skg_manager.api.handlers import get_temp_dir
+from .temp_dir_handler import get_temp_dir
 
 
 def read_ksjon() -> Dict[str, Union[str, Dict[str, str]]]:

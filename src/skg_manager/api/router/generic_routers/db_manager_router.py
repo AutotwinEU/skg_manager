@@ -1,7 +1,9 @@
 from colorama import Fore
 from neo4j.exceptions import ServiceUnavailable
 
-from skg_manager import DatabaseManagerInterface, DatabaseManagerRouterInterface, Result
+from ....generic.service_interfaces.db_manager_interface import DatabaseManagerInterface
+from ..interface_routers.db_manager_router_interface import DatabaseManagerRouterInterface
+from ..router_result import Result
 
 
 class DatabaseManagerRouter(DatabaseManagerRouterInterface):

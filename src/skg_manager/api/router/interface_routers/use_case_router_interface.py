@@ -1,6 +1,6 @@
 from abc import ABC, abstractmethod
 
-from skg_manager import Result
+from ..router_result import Result
 
 
 class UseCaseRouterInterface(ABC):

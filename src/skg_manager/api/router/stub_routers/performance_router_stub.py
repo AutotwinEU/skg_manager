@@ -1,5 +1,5 @@
 from ...router.interface_routers.performance_router_interface import PerformanceRouterInterface
-from skg_manager import Result
+from ..router_result import Result
 
 
 def not_implemented():

@@ -1,5 +1,5 @@
-from ...router.interface_routers.use_case_router_interface import UseCaseRouterInterface
-from skg_manager import Result
+from ..interface_routers.use_case_router_interface import UseCaseRouterInterface
+from ..router_result import Result
 
 
 def not_implemented():

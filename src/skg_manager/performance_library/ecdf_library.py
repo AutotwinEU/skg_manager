@@ -5,8 +5,8 @@ import pickle
 from matplotlib import pyplot
 from pandas import DataFrame
 
-from src.skg_manager.performance_library.conformance_metric_functions import EcdfConformanceMetrics
-from src.skg_manager.performance_library.ecdf import Ecdf
+from .conformance_metric_functions import EcdfConformanceMetrics
+from .ecdf import Ecdf
 
 
 def deserialize_objects(value):

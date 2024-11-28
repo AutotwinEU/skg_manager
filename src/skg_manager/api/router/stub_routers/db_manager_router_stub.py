@@ -1,5 +1,5 @@
-from ...router.interface_routers.db_manager_router_interface import DatabaseManagerRouterInterface
-from skg_manager import Result
+from ..interface_routers.db_manager_router_interface import DatabaseManagerRouterInterface
+from ..router_result import Result
 
 
 def not_implemented():

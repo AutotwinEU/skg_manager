@@ -1,6 +1,6 @@
 from promg import Query
 
-from src.skg_manager.performance_library.ecdf_library import EcdfConformanceMetrics
+from ...performance_library.ecdf_library import EcdfConformanceMetrics
 
 
 class PerformanceQueryLibrary:

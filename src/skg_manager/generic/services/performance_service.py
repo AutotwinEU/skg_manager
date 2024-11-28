@@ -2,8 +2,8 @@ import logging
 
 from promg import DatabaseConnection
 
-from src.skg_manager.generic.queries.performance_queries import PerformanceQueryLibrary as pfql
-from src.skg_manager.performance_library.ecdf_library import AnnotatedEcdf, EcdfCollection, deserialize_objects
+from ..queries.performance_queries import PerformanceQueryLibrary as pfql
+from ...performance_library.ecdf_library import AnnotatedEcdf, EcdfCollection, deserialize_objects
 
 
 def create_ecdf_object(exec_time):
