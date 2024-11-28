@@ -1,6 +1,6 @@
 from abc import ABC, abstractmethod
 
-from ....api.router.router_result import Result
+from ...router.router_result import Result
 
 
 class PerformanceRouterInterface(ABC):

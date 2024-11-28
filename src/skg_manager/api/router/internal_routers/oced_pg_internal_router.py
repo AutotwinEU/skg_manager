@@ -1,8 +1,8 @@
 from flask import Blueprint, request, Response
 
 from ....api.exceptions.exception_handler import db_exception_handler
-from ....api.router.interface_routers.oced_pg_router_interface import OcedPgRouterInterface
-from ....api.router.router_result_converter import convert_result_into_response
+from ...router.interface_routers.oced_pg_router_interface import OcedPgRouterInterface
+from ...router.router_result_converter import convert_result_into_response
 
 
 class OcedPgInternalRouter:

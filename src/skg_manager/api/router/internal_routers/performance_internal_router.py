@@ -1,8 +1,8 @@
 from flask import Blueprint, Response
 
 from ....api.exceptions.exception_handler import db_exception_handler
-from ....api.router.interface_routers.performance_router_interface import PerformanceRouterInterface
-from ....api.router.router_result_converter import convert_result_into_response
+from ...router.interface_routers.performance_router_interface import PerformanceRouterInterface
+from ...router.router_result_converter import convert_result_into_response
 
 
 class PerformanceInternalRouter:

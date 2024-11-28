@@ -1,5 +1,5 @@
-from ....api.router.interface_routers.db_manager_router_interface import DatabaseManagerRouterInterface
-from ....api.router.router_result import Result
+from ...router.interface_routers.db_manager_router_interface import DatabaseManagerRouterInterface
+from ...router.router_result import Result
 
 
 def not_implemented():

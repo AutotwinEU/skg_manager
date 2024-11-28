@@ -1,8 +1,8 @@
 from flask import Blueprint, make_response, Response
 
 from ....api.exceptions.exception_handler import db_exception_handler
-from ....api.router.interface_routers.db_manager_router_interface import DatabaseManagerRouterInterface
-from ....api.router.router_result_converter import convert_result_into_response
+from ...router.interface_routers.db_manager_router_interface import DatabaseManagerRouterInterface
+from ...router.router_result_converter import convert_result_into_response
 
 
 class DatabaseManagerInternalRouter:
