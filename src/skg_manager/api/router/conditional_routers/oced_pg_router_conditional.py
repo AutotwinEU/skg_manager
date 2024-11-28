@@ -1,5 +1,5 @@
-from skg_manager import Result, OcedPgRouterInterface
-
+from ..router_result import Result
+from ..interface_routers.oced_pg_router_interface import OcedPgRouterInterface
 from ...router.route_data_extractors import extract_is_simulation_data
 
 
