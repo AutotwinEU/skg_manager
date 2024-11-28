@@ -29,6 +29,6 @@ setup(
     long_description_content_type='text/markdown',
     packages=find_packages(
         where='src',
-        include=['promg*']),
+        include=['skg_manager*']),
     package_dir={"": "src"}
 )
