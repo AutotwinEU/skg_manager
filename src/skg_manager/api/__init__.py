@@ -26,7 +26,6 @@ from .router.stub_routers.performance_router_stub import PerformanceRouterStub
 from .router.stub_routers.use_case_router_stub import UseCaseRouterStub
 
 
-
 def init_promg_configuration(semantic_header_path,
                              dataset_description_path,
                              db_name, uri, user,
@@ -65,7 +64,6 @@ class SKGApp:
         self._app = Flask(__name__)
         cors = CORS(self._app)
         self._set_up_config()
-        self._create_promg_config()
         self._set_test_config(test_config=test_config)
 
         self._registered_blueprints = {
@@ -118,56 +116,23 @@ class SKGApp:
             self._app.config.update(test_config)
 
     def _set_up_config(self):
-        dotenv_location = find_dotenv()
-        load_dotenv(dotenv_location)
-
         self._app.config.from_mapping(
             SSO_EDM_TOKEN_URL=os.getenv('SSO_EDM_TOKEN_URL'),
             EDM_BASE_URL=os.getenv('EDM_BASE_URL'),
-            EDM_KEYCLOAK_URL=os.getenv('EDM_KEYCLOAK_URL')
+            EDM_KEYCLOAK_URL=os.getenv('EDM_KEYCLOAK_URL'),
+            NEO4J_URI=os.getenv('NEO4J_URI'),
+            NEO4J_USER=os.getenv('NEO4J_USERNAME'),
+            NEO4J_DB_NAME=os.getenv('NEO4J_DB_NAME'),
+            NEO4j_PASSWORD=os.getenv('NEO4J_PASSWORD')
         )
 
-    def _create_promg_config(self):
-        dotenv_location = find_dotenv()
-        load_dotenv(dotenv_location)
-
-        promg_semantic_header_path = os.getenv('PROMG_SEMANTIC_HEADER_PATH')
-        dataset_description_path = os.getenv('PROMG_DATASET_DESCRIPTION_PATH')
-
-        promg_sim_semantic_header_path = os.getenv('PROMG_SIM_SEMANTIC_HEADER_PATH')
-        sim_dataset_description_path = os.getenv('PROMG_SIM_DATASET_DESCRIPTION_PATH')
-
-        neo4j_uri = os.getenv('NEO4J_URI')
-        neo4j_user = os.getenv('NEO4J_USERNAME')
-        neo4j_db_name = os.getenv('NEO4J_DB_NAME')
-        neo4j_password = os.getenv('NEO4J_PASSWORD')
-        promg_batch_size = int(os.getenv('PROMG_BATCH_SIZE'))
-        promg_use_sample = getenv_bool('PROMG_USE_SAMPLE', False)
-
-        self.promg_config = init_promg_configuration(
-            semantic_header_path=promg_semantic_header_path,
-            dataset_description_path=dataset_description_path,
-            db_name=neo4j_db_name,
-            uri=neo4j_uri,
-            user=neo4j_user,
-            password=neo4j_password,
-            verbose=False,
-            batch_size=promg_batch_size,
-            use_sample=promg_use_sample,
-            use_preprocessed_files=False
-        )
-        self.promg_sim_config = init_promg_configuration(
-            semantic_header_path=promg_sim_semantic_header_path,
-            dataset_description_path=sim_dataset_description_path,
-            db_name=neo4j_db_name,
-            uri=neo4j_uri,
-            user=neo4j_user,
-            password=neo4j_password,
-            verbose=False,
-            batch_size=promg_batch_size,
-            use_sample=promg_use_sample,
-            use_preprocessed_files=False
-        )
+    def get_database_credentials(self):
+        return {
+            "uri": self._app.config.get("NEO4J_URI"),
+            "user": self._app.config.get("NEO4J_USERNAME"),
+            "db_name": self._app.config.get("NEO4J_DB_NAME"),
+            "password": self._app.config.get('NEO4J_PASSWORD')
+        }
 
     def register_db_manager_router(self, db_manager_router=None):
         if not self._registered_blueprints["db_manager_router"]:
