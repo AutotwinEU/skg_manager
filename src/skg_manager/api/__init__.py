@@ -120,9 +120,9 @@ class SKGApp:
             EDM_BASE_URL=os.getenv('EDM_BASE_URL'),
             EDM_KEYCLOAK_URL=os.getenv('EDM_KEYCLOAK_URL'),
             NEO4J_URI=os.getenv('NEO4J_URI'),
-            NEO4J_USER=os.getenv('NEO4J_USERNAME'),
+            NEO4J_USERNAME=os.getenv('NEO4J_USERNAME'),
             NEO4J_DB_NAME=os.getenv('NEO4J_DB_NAME'),
-            NEO4j_PASSWORD=os.getenv('NEO4J_PASSWORD')
+            NEO4J_PASSWORD=os.getenv('NEO4J_PASSWORD')
         )
 
     def get_database_credentials(self):
