@@ -60,6 +60,7 @@ def getenv_bool(name: str, default_value: bool | None = None) -> bool:
 
 class SKGApp:
     def __init__(self, test_config=None):
+        print("I'm version 0.0.2")
         self._app = Flask(__name__)
         cors = CORS(self._app)
         self._set_up_config()
@@ -115,6 +116,9 @@ class SKGApp:
             self._app.config.update(test_config)
 
     def _set_up_config(self):
+        print(f"Neo4j username: {os.getenv('NEO4J_USERNAME')}")
+        print(f"Neo4j password: {os.getenv('NEO4J_PASSWORD')}")
+
         self._app.config.from_mapping(
             SSO_EDM_TOKEN_URL=os.getenv('SSO_EDM_TOKEN_URL'),
             EDM_BASE_URL=os.getenv('EDM_BASE_URL'),
