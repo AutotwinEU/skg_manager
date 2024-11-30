@@ -6,5 +6,4 @@ Generally, a method stub contains just enough code to allow it to be used – a 
 and if applicable, a return value.[2]
 
 A method stub may be used to implement an interface that is defined but for which the implementation is not available.
-
 """

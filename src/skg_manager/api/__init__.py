@@ -3,7 +3,6 @@ from __future__ import annotations
 import os
 
 ## ======================================================
-from dotenv import load_dotenv, find_dotenv
 from flask import Flask
 from flask_cors import CORS
 from promg import Configuration
