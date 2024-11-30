@@ -13,8 +13,8 @@ class UseCaseRouterStub(UseCaseRouterInterface):
 
     def on_get_namespaces(self) -> Result:
         not_implemented()
-        return Result(status=Result.Status.NOT_IMPLEMENTED, message=[])
+        return Result(status=Result.Status.NOT_IMPLEMENTED, message="")
 
     def on_get_entity_types(self) -> Result:
         not_implemented()
-        return Result(status=Result.Status.NOT_IMPLEMENTED, message=[])
+        return Result(status=Result.Status.NOT_IMPLEMENTED, message="")
