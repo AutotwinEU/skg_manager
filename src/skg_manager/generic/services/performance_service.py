@@ -22,7 +22,7 @@ def create_ecdf_object(exec_time):
     return ecdf
 
 
-class CromaPerformanceModule:
+class PerformanceService:
     def __init__(self, db_connection: DatabaseConnection, working_dir):
         self.connection = db_connection
         self.ecdf_collections = None
