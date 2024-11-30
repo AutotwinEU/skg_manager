@@ -10,6 +10,9 @@ def not_implemented():
 
 class DatabaseManagerRouterStub(DatabaseManagerRouterInterface):
 
+    def on_test_connection(self) -> Result:
+        return not_implemented()
+
     def on_clear_db(self) -> Result:
         return not_implemented()
 
