@@ -20,9 +20,12 @@ class OcedPgInternalRouter:
                                          methods=['POST'])
 
     @db_exception_handler
-    def handle_load_records(self) -> Response:
+    def handle_load_records(self) -> Exception | Response:
         route_data = request.args
-        result = self.implementation.on_load_records(route_data)
+        try:
+            result = self.implementation.on_load_records(route_data)
+        except Exception as e:
+            return e
         return convert_result_into_response(result)
 
     @db_exception_handler
