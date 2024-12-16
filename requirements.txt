@@ -6,4 +6,4 @@ requests~=2.32.3
 numpy~=2.1.3
 setuptools~=70.0.0
 flask-swagger-ui==4.11.1
-promg~=2.2.2
+promg==2.2.3
