@@ -10,10 +10,7 @@ class ConditionalOcedPGRouter(OcedPgRouterInterface):
         self.simulation_router = simulation_router
 
     def on_load_records(self, route_data) -> Result:
-        if extract_is_simulation_data(route_data):
-            return self.simulation_router.on_load_records(route_data)
-        else:
-            return self.ground_truth_router.on_load_records(route_data)
+        return self.simulation_router.on_load_records(route_data)
 
     def on_transform_records(self, route_data) -> Result:
         if extract_is_simulation_data(route_data):
