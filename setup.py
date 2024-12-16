@@ -30,5 +30,6 @@ setup(
     packages=find_packages(
         where='src',
         include=['skg_manager*']),
-    package_dir={"": "src"}
+    package_dir={"": "src"},
+    package_data={'skg_manager': ['api/static/swagger.json']}
 )
