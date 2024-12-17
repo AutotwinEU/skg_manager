@@ -6,7 +6,7 @@ from ..router_result_converter import convert_result_into_response
 
 
 class PerformanceInternalRouter:
-    performance_routes = Blueprint("performance_library", __name__, url_prefix="/performance")
+    performance_routes = Blueprint("performance", __name__, url_prefix="/performance")
 
     def __init__(self, implementation: PerformanceRouterInterface):
         self.implementation = implementation
