@@ -100,8 +100,7 @@ class PerformanceQueryLibrary:
         query_str = '''
             MATCH (p1: LatencyECDF {name: $name1}) <- [:HAS_PERFORMANCE] - () - [:HAS_PERFORMANCE] -> (p2:LatencyECDF 
             {name: $name2})
-            MERGE (p1) - [:CONFORMANCE {difference: $difference, similarity: $similarity, performance_library: 
-            $performance_library, 
+            MERGE (p1) - [:CONFORMANCE {difference: $difference, similarity: $similarity, performance: $performance, 
             kolmogorov: $kolmogorov}] -> (p2)'''
         return Query(query_str=query_str,
                      parameters={
@@ -109,7 +108,7 @@ class PerformanceQueryLibrary:
                          "name2": name2,
                          "difference": conformance.difference,
                          "similarity": conformance.similarity,
-                         "performance_library": conformance.performance,
+                         "performance": conformance.performance,
                          "kolmogorov": conformance.kolmogorov
                      })
 
@@ -126,7 +125,7 @@ class PerformanceQueryLibrary:
         query_str = '''match (e1:Performance:LatencyECDF{name:"$ecdf_name1"})
                        match (e2:Performance:LatencyECDF{name:"$ecdf_name2"})
                        match (e1)-[c:CONFORMANCE]->(e2)
-                       return c.similarity as sim, c.difference as diff, c.performance_library as perf, c.kolmogorov 
+                       return c.similarity as sim, c.difference as diff, c.performance as perf, c.kolmogorov 
                        as kolm'''
         return Query(query_str=query_str,
                      template_string_parameters={"ecdf_name1": ecdf_name1, "ecdf_name2": ecdf_name2})
