@@ -22,7 +22,7 @@ class DatabaseManagerInternalRouter:
         self.db_manager_routes.add_url_rule('/time_span', 'handle_get_timespan', view_func=self.handle_get_timespan,
                                             methods=['GET'])
         self.db_manager_routes.add_url_rule('/records_time_span', 'handle_get_records_timespan',
-                                            view_func=self.handle_get_records_timespan,
+                                            view_func=self.handle_get_ground_truth_records_timespan,
                                             methods=['GET'])
         self.db_manager_routes.add_url_rule('/logs', 'handle_get_logs', view_func=self.handle_get_logs,
                                             methods=['GET'])
@@ -61,8 +61,8 @@ class DatabaseManagerInternalRouter:
         return convert_result_into_response(result)
 
     @db_exception_handler
-    def handle_get_records_timespan(self) -> Response:
-        result = self.implementation.on_get_records_timespan()
+    def handle_get_ground_truth_records_timespan(self) -> Response:
+        result = self.implementation.on_get_ground_truth_records_timespan()
         return convert_result_into_response(result)
 
     @db_exception_handler

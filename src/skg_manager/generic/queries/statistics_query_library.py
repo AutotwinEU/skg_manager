@@ -16,9 +16,10 @@ class StatisticsQueryLibrary:
         return Query(query_str=query_str)
 
     @staticmethod
-    def get_time_span_of_records_query():
+    def get_time_span_of_ground_truth_records_query():
         query_str = '''
-            MATCH (r:Record)
+            MATCH (l:Log) - [:CONTAINS] -> (r:Record)
+            WHERE NOT l.name CONTAINS "sim"
             WITH min(r.timestamp) as start_time, max(r.timestamp) as end_time
             WITH date(start_time) as start_date, date(end_time) as end_date
             RETURN toString(start_date) as start_date, toString(end_date) as end_date

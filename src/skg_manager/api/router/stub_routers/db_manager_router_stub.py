@@ -22,7 +22,7 @@ class DatabaseManagerRouterStub(DatabaseManagerRouterInterface):
     def on_get_timespan(self) -> Result:
         return not_implemented()
 
-    def on_get_records_timespan(self) -> Result:
+    def on_get_ground_truth_records_timespan(self) -> Result:
         return not_implemented()
 
     def on_get_logs(self) -> Result:

@@ -71,9 +71,9 @@ class DatabaseManagerRouter(DatabaseManagerRouterInterface):
         except Exception as e:
             return Result(status=Result.Status.FAILURE, message=str(e))
 
-    def on_get_records_timespan(self) -> Result:
+    def on_get_ground_truth_records_timespan(self) -> Result:
         try:
-            item_list = self.db_manager.get_records_time_span()
+            item_list = self.db_manager.get_ground_truth_records_time_span()
             return Result(status=Result.Status.SUCCESS, message="Successfully requested record timespan",
                           data=item_list)
         except Exception as e:

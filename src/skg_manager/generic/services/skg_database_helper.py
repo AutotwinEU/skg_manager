@@ -45,8 +45,8 @@ class SKGDatabaseHelper(DBManagement, DatabaseManagerInterface):
         result = self.connection.exec_query(sql.get_time_span_query)
         return result
 
-    def get_records_time_span(self):
-        result = self.connection.exec_query(sql.get_time_span_of_records_query)
+    def get_ground_truth_records_time_span(self):
+        result = self.connection.exec_query(sql.get_time_span_of_ground_truth_records_query)
         return result
 
     def get_statistics(self) -> List[Dict[str, any]]:

@@ -23,7 +23,7 @@ class DatabaseManagerInterface(ABC):
         pass
 
     @abstractmethod
-    def get_records_time_span(self):
+    def get_ground_truth_records_time_span(self):
         pass
 
     @abstractmethod
