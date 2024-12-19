@@ -112,7 +112,7 @@ def create_file_name(file_cds: str) -> str:
     return file_name
 
 
-def get_files_from_cds(namespace, already_imported_logs: List[str], defined_files: List[str]):
+def get_files_from_cds(namespace, already_imported_logs: List[str], defined_files: List[str], working_dir: str = ""):
     """ Method that determines the files to be retrieved and requests these files
 
     :param already_imported_logs: List of names ensuring we are not re-retrieving double files
@@ -127,7 +127,7 @@ def get_files_from_cds(namespace, already_imported_logs: List[str], defined_file
 
     """
 
-    temp_dir = get_temp_dir()
+    temp_dir = get_temp_dir(working_dir=working_dir)
     token = get_edm_token(read_ksjon())
     files_in_cds = get_file_names_of_cds(token, namespace=namespace)
 
