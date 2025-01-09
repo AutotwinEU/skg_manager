@@ -86,7 +86,14 @@ class EcdfCollection:
 
     def calculate_conformance_metrics(self, ecdf_1: AnnotatedEcdf, ecdf_2: AnnotatedEcdf):
         conformance_metrics = EcdfConformanceMetrics(ecdf_1, ecdf_2)
-        self.__ecdf_conformance_metrics[(ecdf_1.get_legend(), ecdf_2.get_legend())] = conformance_metrics
+
+        # enforce that the conformance is always computed from ground truth data to simulation data
+        if ecdf_1.get_gt_sim() == "gt":  # and therefore ecdf_2.get_gt_sim() == "sim"
+            pair = (ecdf_1.get_legend(), ecdf_2.get_legend())
+        else:  # and therefore ecdf_1.get_gt_sim() == "sim" and ecdf_2.get_gt_sim() == "gt"
+            pair = (ecdf_2.get_legend(), ecdf_1.get_legend())
+
+        self.__ecdf_conformance_metrics[pair] = conformance_metrics
 
     def add_ecdf(self, ecdf, compute_conformance_metrics=True):
         if ecdf.get_legend() not in self.__ecdfs:
