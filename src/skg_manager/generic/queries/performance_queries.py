@@ -1,3 +1,5 @@
+from typing import List
+
 from promg import Query
 
 from ...performance_library.ecdf_library import EcdfConformanceMetrics
@@ -31,17 +33,58 @@ class PerformanceQueryLibrary:
         return Query(query_str=query_str)
 
     # =========================================================================================
+
     @staticmethod
-    def execution_times_between_sensors():
+    def get_processing_times_of_stations_query(start_time="1970-01-01 00:00:00", end_time="2970-01-01 23:59:59",
+                                               stations: List[str] = None):
+        # date times have to be in the format "yyyy-MM-dd HH:mm:ss"
+        # if stations is None, we will include all stations
+        if stations is not None:
+            check_stations_str = f"WHERE st.sysId IN $stations"
+        else:
+            check_stations_str = ""
+
+        query_str = '''
+               MATCH (e1:Event) - [r:DF_CONTROL_FLOW_ITEM] -> (e2)
+               WHERE e1.timestamp >= datetime(apoc.date.convertFormat($start_time,"yyyy-MM-dd HH:mm:ss",
+               "ISO_DATE_TIME")) 
+               AND e2.timestamp <= datetime(apoc.date.convertFormat($end_time,"yyyy-MM-dd HH:mm:ss","ISO_DATE_TIME")) 
+               MATCH (e1)-[:EXECUTED_BY]->(s1:Sensor {type="ENTER"}) - [:PART_OF] -> (st:Station)
+               MATCH (e2)-[:EXECUTED_BY]->(s2:Sensor {type="EXIT"}) - [:PART_OF] -> (st)
+               $check_stations_str
+               WITH s1.simulated is not null as is_simulated_data, st.sysId as station, s1.sysId as input_sensor, 
+               s2.sysId as output_sensor, 
+               COLLECT(duration.inSeconds(e1.timestamp, e2.timestamp).seconds) as times
+               RETURN is_simulated_data, station, input_sensor, output_sensor, times
+               '''
+        return Query(query_str=query_str,
+                     parameters={
+                         "start_time": start_time,
+                         "end_time": end_time,
+                         "stations": stations
+                     }, template_string_parameters={
+                "check_stations_str": check_stations_str
+            })
+
+    # =========================================================================================
+    @staticmethod
+    def execution_times_between_sensors(start_time="1970-01-01 00:00:00", end_time="2970-01-01 23:59:59"):
+        # date times have to be in the format "yyyy-MM-dd HH:mm:ss"
         query_str = '''
             MATCH (e1:Event) - [r:DF_CONTROL_FLOW_ITEM] -> (e2)
+            WHERE e1.timestamp >= datetime(apoc.date.convertFormat($start_time,"yyyy-MM-dd HH:mm:ss","ISO_DATE_TIME")) 
+            AND e2.timestamp <= datetime(apoc.date.convertFormat($end_time,"yyyy-MM-dd HH:mm:ss","ISO_DATE_TIME")) 
             MATCH (e1)-[:EXECUTED_BY]->(s1:Sensor)
             MATCH (e2)-[:EXECUTED_BY]->(s2:Sensor)
             WITH s1.simulated is not null as is_simulated_data, s1.sysId as input_sensor, s2.sysId as output_sensor, 
             COLLECT(duration.inSeconds(e1.timestamp, e2.timestamp).seconds) as times
             RETURN is_simulated_data, input_sensor, output_sensor, times
             '''
-        return Query(query_str=query_str)
+        return Query(query_str=query_str,
+                     template_string_parameters={
+                         "start_time": start_time,
+                         "end_time": end_time
+                     })
 
     # =========================================================================================
     # retrieves for a sensor, all the execution times on which activity takes place
