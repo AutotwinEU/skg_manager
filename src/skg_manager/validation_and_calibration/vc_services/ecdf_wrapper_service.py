@@ -1,14 +1,12 @@
 import logging
 
-from ..vc_service_interfaces import EcdfMetricCalculatorInterface, GraphEcdfHandlerInterface
+from ..vc_service_interfaces import EcdfWrapperInterface, EcdfServiceInterface
 from ..ecdfs import AnnotatedECDF, AnnotatedEcdfPairing, ECDF
 
 
-class EcdfMetricsCalculator(EcdfMetricCalculatorInterface):
-
-
+class EcdfWrapper(EcdfWrapperInterface):
     def __init__(self, metric_measures, working_dir,
-                 ecdf_handler: GraphEcdfHandlerInterface):
+                 ecdf_handler: EcdfServiceInterface):
 
         self.ecdf_handler = ecdf_handler
         self._type = self.ecdf_handler.get_type()
@@ -22,18 +20,22 @@ class EcdfMetricsCalculator(EcdfMetricCalculatorInterface):
         self.distribution_pairings = {}
 
     # ==============================================================================
-    def calculate_ecdfs_from_skg(self, time_interval=None) -> None:
+    def calculate_ecdfs_from_skg(self, start_time=None, end_time=None) -> None:
         # find all ecdfs for which a calculation has to be made
         self.clear_distribution_pairings()
         try:
-            results = self.ecdf_handler.extract_ecdfs_from_skg(time_interval=time_interval)
-            logging.debug(f"Execution times fetched for {time_interval}: {results}")
+            results = self.ecdf_handler.extract_ecdfs_from_skg(start_time=start_time, end_time=end_time)
+            logging.debug(
+                f"Distribution {self.ecdf_handler.get_type()} fetched for "
+                f"{start_time if start_time is not None else ''} - {end_time if end_time is not None else ''} : "
+                f"{results}")
 
             if not results or len(results) == 0:
                 logging.warning("No execution times found")
                 return None  # Early return if no data is found
 
             for skg_result in results:
+                print(skg_result)
                 distribution = self.create_annotated_ecdf(skg_result)
                 self.add_ecdf_to_pairings(distribution)
 
@@ -46,11 +48,13 @@ class EcdfMetricsCalculator(EcdfMetricCalculatorInterface):
         key = skg_result["key"]
         dist_values = skg_result["dist_values"]
         element_id = skg_result["element_id"]
+        entity_type = skg_result["entity_type"]
 
         # Create ECDF object
         distribution = AnnotatedECDF(values=dist_values,
                                      legend=f"{self._type}: {key}",
                                      key=key,
+                                     entity_type=entity_type,
                                      element_id=element_id,
                                      _type=self._type,
                                      gt_sim=gt_sim)
@@ -96,20 +100,20 @@ class EcdfMetricsCalculator(EcdfMetricCalculatorInterface):
 
     def create_index_file(self):
         f = open(self.working_dir + "/index.html", "w")
-        f.write("<h2>Ecdfcs</h2>\n")
-        for index, ecdf_collection in enumerate(self.distribution_pairings.values()):
-            ecdf_collection.plot_to_file(self.working_dir, show=False)
-            f.write("<h4>" + ecdf_collection.return_title() + "\n")
+        f.write(f"<h2>Ecdf for {self._type}</h2>\n")
+        for index, ecdf_pairing in enumerate(self.distribution_pairings.values()):
+            ecdf_pairing.plot_to_file(self.working_dir, show=False)
+            f.write("<h4>" + self._type + ": " + ecdf_pairing.return_title() + "\n")
             f.write(
-                f"<a id='eCDF {index}'></h4><img src='{ecdf_collection.return_title()}.svg'><a href='#top'>back to "
+                f"<a id='eCDF {index}'></h4><img src='{ecdf_pairing.return_title()}.svg'><a href='#top'>back to "
                 f"top<a><br>\n")
 
             f.write("<br>Aggregate values:<br>")
-            ecdf_data = ecdf_collection.get_table_of_ecdf_aggregate()
+            ecdf_data = ecdf_pairing.get_distribution_characteristics_table()
             f.write(ecdf_data.to_html(index=False, justify="left"))
 
-            conformance_data = ecdf_collection.get_conformance_table()
-            if len(conformance_data) > 0:
-                f.write("<br>Conformance values:<br>")
+            conformance_data = ecdf_pairing.get_metric_comparison_table()
+            if not conformance_data.empty:
+                f.write("<br>Metric results:<br>")
                 f.write(conformance_data.to_html(index=False, justify="left"))
         f.close()
