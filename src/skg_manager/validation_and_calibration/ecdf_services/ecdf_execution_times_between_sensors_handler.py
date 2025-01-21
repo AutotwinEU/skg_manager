@@ -38,7 +38,7 @@ class ExecutionTimesBetweenSensorsEcdfHandler(EcdfServiceInterface):
             times as dist_values
             '''
         return Query(query_str=query_str,
-                     template_string_parameters={
+                     parameters={
                          "start_time": start_time,
                          "end_time": end_time
                      })
