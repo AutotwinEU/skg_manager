@@ -74,13 +74,13 @@ class EcdfServiceInterface(ABC):
     @abstractmethod
     def extract_ecdf_query_function(self, start_time="1970-01-01 00:00:00", end_time="2970-01-01 23:59:59") -> Query:
         """
-        Provide a Query object that finds a list of numerical values (samples) for which a an ecdf can be created.
+        Provide a Query object that finds a list of numerical values (samples) for which an ecdf can be created.
         The query should return the following information
-        - element_id --> the ecdf describes the distribution of an object, the element_id is id of the object in the skg
         - key --> the ecdf describes the distribution of an object, the key is a unique description of this object
         which can be understood by humans
+        - element_id --> the ecdf describes the distribution of an object, the element_id is id of the object in the skg
         - is_simulated_data --> the ecdf is retrieved for simulated data or ground truth data
-        - entity_type --> the entity_type
+        - entity_type --> the entity_type for which the distribution is calculated
         - dist_values --> the values of the ecdf (a list of numerical values)
 
         :param start_time: start time of interval formatted as "yyyy-MM-dd HH:mm:ss"
