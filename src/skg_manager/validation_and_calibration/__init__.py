@@ -1,5 +1,5 @@
-from .vc_services import EcdfMetricsCalculator
-from .vc_service_interfaces import EcdfMetricCalculatorInterface
+from .vc_services import EcdfWrapper
+from .vc_service_interfaces import EcdfWrapperInterface
 
-__all__ = [EcdfMetricsCalculator,
-           EcdfMetricCalculatorInterface]
+__all__ = [EcdfWrapper,
+           EcdfWrapperInterface]

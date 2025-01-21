@@ -1,3 +1,3 @@
-from .ecdf_metrics_service import EcdfMetricsCalculator
+from .ecdf_wrapper_service import EcdfWrapper
 
-__all__ = [EcdfMetricsCalculator]
+__all__ = [EcdfWrapper]

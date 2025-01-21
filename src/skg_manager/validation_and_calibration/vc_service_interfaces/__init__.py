@@ -1,5 +1,5 @@
-from .ecdf_metrics_service_interface import EcdfMetricCalculatorInterface
-from .graph_ecdf_handler_interface import GraphEcdfHandlerInterface
+from .ecdf_wrapper_service_interface import EcdfWrapperInterface
+from .ecdf_service_interface import EcdfServiceInterface
 
-__all__ = [EcdfMetricCalculatorInterface,
-           GraphEcdfHandlerInterface]
+__all__ = [EcdfWrapperInterface,
+           EcdfServiceInterface]
