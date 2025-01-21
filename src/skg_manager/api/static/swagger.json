@@ -372,6 +372,34 @@
         }
       }
     },
+    "/oced_pg/clean": {
+      "post": {
+        "tags": [
+          "OCED-PG - SKG Manager"
+        ],
+        "description": "Clean transformed data in the System Knowledge Graph",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "is_simulation_data",
+            "in": "query",
+            "description": "is the data to be cleaned ground truth data (false) or simulation data (true)",
+            "required": true,
+            "type": "boolean"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Records successfully cleaned"
+          },
+          "503": {
+            "description": "Unsuccessful database connectivity"
+          }
+        }
+      }
+    },
     "/oced_pg/delete_simulated_data": {
       "post": {
         "tags": [

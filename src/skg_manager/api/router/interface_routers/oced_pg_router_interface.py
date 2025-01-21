@@ -13,5 +13,9 @@ class OcedPgRouterInterface(ABC):
         pass
 
     @abstractmethod
+    def on_clean_transformed_data(self, route_data) -> Result:
+        pass
+
+    @abstractmethod
     def on_delete_simulated_data(self, route_data) -> Result:
         pass

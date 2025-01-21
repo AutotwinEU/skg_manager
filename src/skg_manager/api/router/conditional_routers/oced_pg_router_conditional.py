@@ -21,5 +21,11 @@ class ConditionalOcedPGRouter(OcedPgRouterInterface):
         else:
             return self.ground_truth_router.on_transform_records(route_data)
 
+    def on_clean_transformed_data(self, route_data) -> Result:
+        if extract_is_simulation_data(route_data):
+            return self.simulation_router.on_clean_transformed_data(route_data)
+        else:
+            return self.ground_truth_router.on_clean_transformed_data(route_data)
+
     def on_delete_simulated_data(self, route_data) -> Result:
         return self.simulation_router.on_delete_simulated_data(route_data)
