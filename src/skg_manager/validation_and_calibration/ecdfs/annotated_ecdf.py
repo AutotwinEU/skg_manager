@@ -4,12 +4,13 @@ from .ecdf import ECDF
 
 
 class AnnotatedECDF(ECDF):
-    def __init__(self, key, values, _type, element_id, legend="", gt_sim="gt"):
+    def __init__(self, key, values, entity_type, _type, element_id, legend="", gt_sim="gt"):
         super().__init__(values)
         self.__key = key
         self.__type = _type
         self.__legend = legend
         self.__gt_sim = gt_sim
+        self.__entity_type = entity_type
 
         self._linked_element_id = element_id
 
@@ -18,10 +19,13 @@ class AnnotatedECDF(ECDF):
         return self.__legend < other.get_legend()
 
     def get_label_color(self):
-        if self.get_gt_sim() == "gt":
+        if self.is_gt():
             return "blue"
         else:
             return "orange"
+
+    def is_gt(self):
+        return self.get_gt_sim() == "gt"
 
     def plot_cdf(self, legend):
         legend.append(self.get_gt_sim())
@@ -40,7 +44,12 @@ class AnnotatedECDF(ECDF):
 
     # returns the associated sensors of an Ecdf
     def get_key(self):
-        return self.__key
+        if self.__entity_type in self.__key:
+            return self.__key
+        return self.__key + '_' + self.__entity_type
+
+    def get_entity_type(self):
+        return self.__entity_type
 
     # EV: Add getter for gt_sim
     def get_gt_sim(self):
@@ -54,6 +63,8 @@ class AnnotatedECDF(ECDF):
 
     def as_dict(self):
         return {
-            'design': self.get_legend(), 'min': self.get_min_value(), 'max': self.get_max_value(),
+            'source': self.get_gt_sim(),
+            'entity_type': self.get_entity_type(),
+            'min': self.get_min_value(), 'max': self.get_max_value(),
             'mean': self.get_avg_value(), 'median': self.get_median_value()
         }
