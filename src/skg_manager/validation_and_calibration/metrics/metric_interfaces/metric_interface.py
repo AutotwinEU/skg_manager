@@ -9,3 +9,7 @@ class MetricInterface(ABC):
     @abstractmethod
     def get_name(self):
         pass
+
+    @abstractmethod
+    def get_optimization_direction(self):
+        pass

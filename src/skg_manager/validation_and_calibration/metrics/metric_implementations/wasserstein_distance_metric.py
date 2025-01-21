@@ -16,3 +16,6 @@ class WassersteinDistanceMetric(MetricInterface):
 
     def __repr__(self):
         return self.__str__()
+
+    def get_optimization_direction(self):
+        return "MIN"
