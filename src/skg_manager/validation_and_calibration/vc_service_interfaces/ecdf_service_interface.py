@@ -7,9 +7,9 @@ from skg_manager.generic.queries.performance_queries import PerformanceQueryLibr
 
 class EcdfServiceInterface(ABC):
 
-    def __init__(self, db_connection, type):
+    def __init__(self, db_connection, described_behavior):
         self.db_connection = db_connection
-        self._type = type
+        self._described_behavior = described_behavior
 
     @staticmethod
     def check_is_date(timestamp):
@@ -62,14 +62,14 @@ class EcdfServiceInterface(ABC):
 
     def remove_ecdf_nodes_from_skg(self):
         self.db_connection.exec_query(pfql.delete_ecdf_nodes,
-                                      **{"_type": self._type})
+                                      **{"_type": self._described_behavior})
 
     def retrieve_ecdf_nodes_from_skg(self):
         return self.db_connection.exec_query(pfql.retrieve_distributions,
-                                             **{"_type": self._type})
+                                             **{"_type": self._described_behavior})
 
-    def get_type(self):
-        return self._type
+    def get_described_behavior(self):
+        return self._described_behavior
 
     @abstractmethod
     def extract_ecdf_query_function(self, start_time="1970-01-01 00:00:00", end_time="2970-01-01 23:59:59") -> Query:
