@@ -1,7 +1,7 @@
 from abc import ABC, abstractmethod
 
 
-class EcdfMetricCalculatorInterface(ABC):
+class EcdfWrapperInterface(ABC):
     @abstractmethod
     def remove_ecdfs_from_skg(self):
         pass
