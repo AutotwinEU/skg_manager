@@ -9,7 +9,7 @@ class EcdfWrapper(EcdfWrapperInterface):
                  ecdf_handler: EcdfServiceInterface):
 
         self.ecdf_handler = ecdf_handler
-        self._type = self.ecdf_handler.get_type()
+        self._described_behavior = self.ecdf_handler.get_described_behavior()
 
         self.metric_measures = metric_measures
 
@@ -26,7 +26,7 @@ class EcdfWrapper(EcdfWrapperInterface):
         try:
             results = self.ecdf_handler.extract_ecdfs_from_skg(start_time=start_time, end_time=end_time)
             logging.debug(
-                f"Distribution {self.ecdf_handler.get_type()} fetched for "
+                f"Distribution {self._described_behavior} fetched for "
                 f"{start_time if start_time is not None else ''} - {end_time if end_time is not None else ''} : "
                 f"{results}")
 
@@ -35,7 +35,6 @@ class EcdfWrapper(EcdfWrapperInterface):
                 return None  # Early return if no data is found
 
             for skg_result in results:
-                print(skg_result)
                 distribution = self.create_annotated_ecdf(skg_result)
                 self.add_ecdf_to_pairings(distribution)
 
@@ -52,11 +51,11 @@ class EcdfWrapper(EcdfWrapperInterface):
 
         # Create ECDF object
         distribution = AnnotatedECDF(values=dist_values,
-                                     legend=f"{self._type}: {key}",
+                                     legend=f"{self._described_behavior}: {key}",
                                      key=key,
                                      entity_type=entity_type,
                                      element_id=element_id,
-                                     _type=self._type,
+                                     _type=self._described_behavior,
                                      gt_sim=gt_sim)
         return distribution
 
@@ -100,10 +99,10 @@ class EcdfWrapper(EcdfWrapperInterface):
 
     def create_index_file(self):
         f = open(self.working_dir + "/index.html", "w")
-        f.write(f"<h2>Ecdf for {self._type}</h2>\n")
+        f.write(f"<h2>Ecdf for {self._described_behavior}</h2>\n")
         for index, ecdf_pairing in enumerate(self.distribution_pairings.values()):
             ecdf_pairing.plot_to_file(self.working_dir, show=False)
-            f.write("<h4>" + self._type + ": " + ecdf_pairing.return_title() + "\n")
+            f.write("<h4>" + self._described_behavior + ": " + ecdf_pairing.return_title() + "\n")
             f.write(
                 f"<a id='eCDF {index}'></h4><img src='{ecdf_pairing.return_title()}.svg'><a href='#top'>back to "
                 f"top<a><br>\n")
