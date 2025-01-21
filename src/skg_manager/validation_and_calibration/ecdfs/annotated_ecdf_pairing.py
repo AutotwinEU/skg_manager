@@ -39,17 +39,14 @@ class AnnotatedEcdfPairing:
         return [self.__gt_dist.get_legend(), self.__sim_dist.get_legend()]
 
     def calculate_metrics(self):
-        metric_results = {}
+        self.__metric_results = {}
 
         if self.__gt_dist is None or self.__sim_dist is None:
-            raise ValueError(
-                "Ground Truth distribution and simulation distribution must be set before calculating metrics")
-
-        for metric in self.__metrics:
-            metric_value = metric.calculate(self.__gt_dist, self.__sim_dist)
-            metric_results[metric.get_name()] = metric_value
-
-        self.__metric_results = metric_results
+            return
+        else:
+            for metric in self.__metrics:
+                metric_value = metric.calculate(self.__gt_dist, self.__sim_dist)
+                self.__metric_results[metric.get_name()] = metric_value
 
     def add_dist(self, dist):
         if dist.get_gt_sim() == "gt":
@@ -75,7 +72,8 @@ class AnnotatedEcdfPairing:
                 "max": dist.get_max_value(),
                 "average": dist.get_avg_value(),
                 "median": dist.get_median_value(),
-                "linked_element_id": dist.get_linked_element_id()
+                "linked_element_id": dist.get_linked_element_id(),
+                "entity_type": dist.get_entity_type()
             })
         return serialized_ecdfs
 
@@ -105,32 +103,32 @@ class AnnotatedEcdfPairing:
 
     def get_metric_comparison_table(self):
         metric_data = self.get_metric_results()
-        metric_data = DataFrame(metric_data)
+        metric_data = DataFrame([metric_data])
         return metric_data
 
     def get_store_pairing_in_skg_query(self):
         query_str = '''
-            UNWIND $distributions as dist
-            CALL {WITH parent, ecdf
-                  CREATE (child:ECDF 
-                    {name: dist.legend, 
-                    key: dist.key,
-                    type: $type,
-                    source: dist.gt_sim,
-                    value: dist.serialized_ecdf,
-                    min: dist.min,
-                    max: dist.max,
-                    average: dist.average,
-                    median: dist.median
-                    })
-                  
+            UNWIND $distributions as ecdf_info
+            CALL {WITH ecdf_info
                   MATCH (linkedElement) 
-                  WHERE id(linkedElement) = dist.linked_element_id  
-                
-                  CREATE (linkedElement) - [:HAS_DISTRIBUTION] -> (child)
+                  MATCH (et:EntityType {entityType: ecdf_info.entityType})
+                  WHERE elementId(linkedElement) = ecdf_info.linked_element_id  
+                     
+                  MERGE (linkedElement) - [:HAS_DISTRIBUTION] -> (ecdf:ECDF {type: $type, key: ecdf_info.key}) 
+                    - [:OF_ENTITY_TYPE] -> (et)
+                  ON CREATE SET ecdf += {name: ecdf_info.legend, 
+                                source: ecdf_info.gt_sim,
+                                value: ecdf_info.serialized_ecdf,
+                                min: ecdf_info.min,
+                                max: ecdf_info.max,
+                                average: ecdf_info.average,
+                                median: ecdf_info.median
+                                }
+                  RETURN ecdf
             }
-            WITH child
-            WITH collect(child) as ecdfs
+            WITH ecdf
+            WITH collect(ecdf) as ecdfs
+            WHERE size(ecdfs) > 1
             WITH CASE
             WHEN ecdfs[0].source = "gt" THEN ecdfs[0]
             ELSE ecdfs[1] 
