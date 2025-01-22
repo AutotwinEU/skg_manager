@@ -15,5 +15,8 @@ class OcedPgRouterStub(OcedPgRouterInterface):
     def on_transform_records(self, route_data) -> Result:
         return not_implemented()
 
+    def on_clean_transformed_data(self, route_data) -> Result:
+        return not_implemented()
+
     def on_delete_simulated_data(self, route_data) -> Result:
         return not_implemented()

@@ -15,6 +15,9 @@ class OcedPgInternalRouter:
         self.oced_pg_routes.add_url_rule('/transform', 'handle_transform_records',
                                          view_func=self.handle_transform_records,
                                          methods=['POST'])
+        self.oced_pg_routes.add_url_rule('/clean', 'handle_clean_transformed_data',
+                                         view_func=self.handle_clean_transformed_data,
+                                         methods=['POST'])
         self.oced_pg_routes.add_url_rule('/delete_simulated_data', 'handle_delete_simulated_data',
                                          view_func=self.handle_delete_simulated_data,
                                          methods=['POST'])
@@ -29,6 +32,12 @@ class OcedPgInternalRouter:
     def handle_transform_records(self) -> Response:
         route_data = request.args
         result = self.implementation.on_transform_records(route_data)
+        return convert_result_into_response(result)
+
+    @db_exception_handler
+    def handle_clean_transformed_data(self) -> Response:
+        route_data = request.args
+        result = self.implementation.on_clean_transformed_data(route_data)
         return convert_result_into_response(result)
 
     @db_exception_handler
