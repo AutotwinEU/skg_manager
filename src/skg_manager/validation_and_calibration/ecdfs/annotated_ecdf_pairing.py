@@ -106,6 +106,13 @@ class AnnotatedEcdfPairing:
         metric_data = DataFrame([metric_data])
         return metric_data
 
+    def get_type(self):
+        if self.__gt_dist is not None:
+            return self.__gt_dist.get_type()
+        if self.__sim_dist is not None:
+            return self.__sim_dist.get_type()
+        return None
+
     def get_store_pairing_in_skg_query(self):
         query_str = '''
             UNWIND $distributions as ecdf_info
@@ -145,7 +152,7 @@ class AnnotatedEcdfPairing:
         return Query(query_str=query_str,
                      parameters={
                          "name": self.__title,
-                         "type": self.__gt_dist.get_type(),
+                         "type": self.get_type(),
                          "distributions": self.get_dists_to_store_in_skg(),
                          "metric_results": self.get_metric_results()
                      })
