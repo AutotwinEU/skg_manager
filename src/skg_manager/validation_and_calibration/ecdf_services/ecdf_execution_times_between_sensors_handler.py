@@ -25,8 +25,8 @@ class ExecutionTimesBetweenSensorsEcdfHandler(EcdfServiceInterface):
 
         query_str = '''
             MATCH (e1:Event) - [r:DF_CONTROL_FLOW_ITEM] -> (e2)
-            WHERE e1.timestamp >= datetime(apoc.date.convertFormat($start_time,"yyyy-MM-dd HH:mm:ss","ISO_DATE_TIME")) 
-            AND e2.timestamp <= datetime(apoc.date.convertFormat($end_time,"yyyy-MM-dd HH:mm:ss","ISO_DATE_TIME")) 
+            WHERE e1.simulated = True OR (e1.timestamp >= datetime(apoc.date.convertFormat($start_time,"yyyy-MM-dd HH:mm:ss","ISO_DATE_TIME")) 
+            AND e2.timestamp <= datetime(apoc.date.convertFormat($end_time,"yyyy-MM-dd HH:mm:ss","ISO_DATE_TIME"))) 
             MATCH (e1) - [:ACTS_ON] -> (k) - [:IS_OF_TYPE] -> (et)
             MATCH (e1)-[:EXECUTED_BY]->(s1:Sensor)
             MATCH (e2)-[:EXECUTED_BY]->(s2:Sensor)
