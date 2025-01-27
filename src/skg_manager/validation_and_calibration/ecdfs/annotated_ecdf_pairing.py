@@ -118,7 +118,7 @@ class AnnotatedEcdfPairing:
             UNWIND $distributions as ecdf_info
             CALL {WITH ecdf_info
                   MATCH (linkedElement) 
-                  MATCH (et:EntityType {entityType: ecdf_info.entityType})
+                  MATCH (et:EntityType {entityType: ecdf_info.entity_type})
                   WHERE elementId(linkedElement) = ecdf_info.linked_element_id  
                      
                   MERGE (linkedElement) - [:HAS_DISTRIBUTION] -> (ecdf:ECDF {type: $type, key: ecdf_info.key}) 
