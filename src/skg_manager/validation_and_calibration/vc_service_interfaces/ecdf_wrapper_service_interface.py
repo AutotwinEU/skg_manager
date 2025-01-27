@@ -3,6 +3,18 @@ from abc import ABC, abstractmethod
 
 class EcdfWrapperInterface(ABC):
     @abstractmethod
+    def set_db_connection(self, db_connection):
+        pass
+
+    @abstractmethod
+    def get_ecdf_type(self):
+        pass
+
+    @abstractmethod
+    def get_metrics(self):
+        pass
+
+    @abstractmethod
     def remove_ecdfs_from_skg(self):
         pass
 

@@ -23,6 +23,7 @@ class PerformanceQueryLibrary:
             return Query(query_str=query_str,
                          parameters={"type": _type}
                          )
+
     # =========================================================================================
     @staticmethod
     def execution_times_between_sensors():
@@ -67,3 +68,29 @@ class PerformanceQueryLibrary:
                        RETURN p.max as max, p.min as min, p.average as average, p.median as median'''
         return Query(query_str=query_str,
                      template_string_parameters={"name": name})
+
+    @staticmethod
+    def get_get_metrics_query(ecdf_type: Optional[str] = None):
+        if ecdf_type is None:
+            query_str = '''
+                MATCH (n_gt:ECDF {source:"gt"}) - [metrics:COMPARES_TO] -> (n_sim:ECDF {source:"sim"})
+                WITH n_gt.type as ecdf_type, properties(metrics) as conformance_metrics
+                RETURN ecdf_type, collect(conformance_metrics) as metrics
+            '''
+        else:
+            query_str = '''
+                MATCH (n_gt:ECDF {source:"gt"}) - [metrics:COMPARES_TO] -> (n_sim:ECDF {source:"sim"})
+                WHERE n_gt.type = $ecdf_type
+                WITH n_gt.type as ecdf_type, properties(metrics) as conformance_metrics
+                RETURN ecdf_type, collect(conformance_metrics) as metrics
+            '''
+        return Query(query_str=query_str,
+                     parameters={"ecdf_type": ecdf_type})
+
+    @staticmethod
+    def get_get_ecdf_type_query():
+        query_str = '''MATCH (n:ECDF)
+                       RETURN collect(distinct n.type) as ecdf_types
+        '''
+
+        return Query(query_str=query_str)

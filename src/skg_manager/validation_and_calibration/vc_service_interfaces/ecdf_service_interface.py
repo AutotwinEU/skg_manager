@@ -7,9 +7,17 @@ from skg_manager.generic.queries.performance_queries import PerformanceQueryLibr
 
 class EcdfServiceInterface(ABC):
 
-    def __init__(self, db_connection, described_behavior):
-        self.db_connection = db_connection
+    def __init__(self, described_behavior):
+        self.db_connection = None
         self._described_behavior = described_behavior
+
+    def set_db_connection(self, db_connection):
+        self.db_connection = db_connection
+
+    def check_db_connection(self):
+        if self.db_connection is None:
+            return False
+        return True
 
     @staticmethod
     def check_is_date(timestamp):
@@ -50,6 +58,8 @@ class EcdfServiceInterface(ABC):
 
     def extract_ecdfs_from_skg(self, start_time=None, end_time=None):
         start_time, end_time = self.check_start_and_end_times(start_time, end_time)
+        if not self.check_db_connection():
+            raise ValueError("No database connection found, have you set it?")
 
         return self.db_connection.exec_query(self.extract_ecdf_query_function,
                                              **{
@@ -58,13 +68,19 @@ class EcdfServiceInterface(ABC):
                                              })
 
     def add_ecdf_nodes_to_skg(self, distribution_pairing):
+        if not self.check_db_connection():
+            raise ValueError("No database connection found, have you set it?")
         self.db_connection.exec_query(distribution_pairing.get_store_pairing_in_skg_query)
 
     def remove_ecdf_nodes_from_skg(self):
+        if not self.check_db_connection():
+            raise ValueError("No database connection found, have you set it?")
         self.db_connection.exec_query(pfql.delete_ecdf_nodes,
                                       **{"_type": self._described_behavior})
 
     def retrieve_ecdf_nodes_from_skg(self):
+        if not self.check_db_connection():
+            raise ValueError("No database connection found, have you set it?")
         return self.db_connection.exec_query(pfql.retrieve_distributions,
                                              **{"_type": self._described_behavior})
 

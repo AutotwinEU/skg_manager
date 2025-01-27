@@ -173,7 +173,6 @@
         }
       }
     },
-
     "/db_manager/records_time_span": {
       "get": {
         "tags": [
@@ -467,6 +466,92 @@
         "responses": {
           "200": {
             "description": "Successful operation"
+          }
+        }
+      }
+    },
+    "/performance/get_ecdf_types": {
+      "get": {
+        "tags": [
+          "Performance"
+        ],
+        "description": "Retrieves the ecdf types present in the graph",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+        ],
+        "responses": {
+          "200": {
+            "description": "A list of ecdf types present in the database"
+          },
+          "503": {
+            "description": "Unsuccessful database connectivity"
+          }
+        }
+      }
+    },
+    "/performance/get_metric_names": {
+      "get": {
+        "tags": [
+          "Performance"
+        ],
+        "description": "Retrieves the metric names and the optimization direction of the calculated measures per ecdf type",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+           {
+            "name": "ecdf_type",
+            "in": "query",
+            "description": "the ecdf type for which the metric names should be retrieved",
+            "required": false,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A list of metric names and their optimization direction is given for the ecdf type"
+          },
+          "503": {
+            "description": "Unsuccessful database connectivity"
+          }
+        }
+      }
+    },
+    "/performance/get_mean_metric_results": {
+      "get": {
+        "tags": [
+          "Performance"
+        ],
+        "description": "Retrieves the mean metrics per ecdf_type",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "ecdf_type",
+            "in": "query",
+            "description": "the ecdf type for which the metrics should be retrieved",
+            "required": false,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A list of metric values is given for the ecdf type"
+          },
+          "503": {
+            "description": "Unsuccessful database connectivity"
           }
         }
       }

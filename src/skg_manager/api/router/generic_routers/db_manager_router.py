@@ -2,14 +2,14 @@ from colorama import Fore
 from neo4j.exceptions import ServiceUnavailable
 
 from .. import extract_list_of_route_data
-from ....generic.service_interfaces.db_manager_interface import DatabaseManagerInterface
+from ....generic.service_interfaces.skg_helper_interface import SKGDatabaseHelperInterface
 from ..interface_routers.db_manager_router_interface import DatabaseManagerRouterInterface
 from ..router_result import Result
 
 
 class DatabaseManagerRouter(DatabaseManagerRouterInterface):
 
-    def __init__(self, db_manager: DatabaseManagerInterface):
+    def __init__(self, db_manager: SKGDatabaseHelperInterface):
         self.db_manager = db_manager
 
     def on_clear_db(self) -> Result:

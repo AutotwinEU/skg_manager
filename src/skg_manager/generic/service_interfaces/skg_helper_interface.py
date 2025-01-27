@@ -1,7 +1,7 @@
 from abc import ABC, abstractmethod
 
 
-class DatabaseManagerInterface(ABC):
+class SKGDatabaseHelperInterface(ABC):
     @abstractmethod
     def clear_db(self, replace):
         pass

@@ -6,10 +6,10 @@ from promg.modules.db_management import DBManagement
 from ..queries.event_log_query_library import EventLogExtractorQueryLibrary as event_log_ql
 from ..queries.index_query_library import IndexQueryLibrary as iql
 from ..queries.statistics_query_library import StatisticsQueryLibrary as sql
-from ..service_interfaces.db_manager_interface import DatabaseManagerInterface
+from ..service_interfaces.skg_helper_interface import SKGDatabaseHelperInterface
 
 
-class SKGDatabaseHelper(DBManagement, DatabaseManagerInterface):
+class SKGDatabaseHelper(DBManagement, SKGDatabaseHelperInterface):
 
     def __init__(self, db_connection: DatabaseConnection, semantic_header=None):
         super().__init__(db_connection, semantic_header)

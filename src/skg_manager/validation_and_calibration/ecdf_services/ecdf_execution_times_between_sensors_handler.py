@@ -4,8 +4,8 @@ from skg_manager.validation_and_calibration.vc_service_interfaces.ecdf_service_i
 
 
 class ExecutionTimesBetweenSensorsEcdfHandler(EcdfServiceInterface):
-    def __init__(self, db_connection):
-        super().__init__(db_connection, described_behavior="Execution Times Between Sensors")
+    def __init__(self):
+        super().__init__(described_behavior="Execution Times Between Sensors")
 
     def extract_ecdf_query_function(self, start_time="1970-01-01 00:00:00", end_time="2970-01-01 23:59:59"):
         """
