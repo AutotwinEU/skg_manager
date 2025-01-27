@@ -1,5 +1,3 @@
-from scipy.stats import stats
-
 from ..metric_interfaces import MetricInterface
 from ...ecdfs import ECDF
 
@@ -10,7 +8,7 @@ class MinimumDifferenceMetric(MetricInterface):
         return abs(gt_dist.get_min_value() - sim_dist.get_min_value())
 
     def __str__(self):
-        return "minimum_difference"
+        return "minimumDifference"
 
     def get_name(self):
         return self.__str__()

@@ -10,7 +10,7 @@ class KolmogorovMetric(MetricInterface):
         return stats.ks_2samp(gt_dist.get_values(), sim_dist.get_values()).pvalue
 
     def __str__(self):
-        return "kolmogorov"
+        return "kolmogorovScore"
 
     def get_name(self):
         return self.__str__()

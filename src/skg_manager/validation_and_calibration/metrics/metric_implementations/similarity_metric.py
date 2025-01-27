@@ -20,7 +20,7 @@ class SimilarityMetric(MetricInterface):
         return sim
 
     def __str__(self):
-        return "similarity"
+        return "similarityScore"
 
     def get_name(self):
         return self.__str__()

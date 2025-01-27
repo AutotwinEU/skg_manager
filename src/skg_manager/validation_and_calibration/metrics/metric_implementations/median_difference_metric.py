@@ -1,5 +1,3 @@
-from scipy.stats import stats
-
 from ..metric_interfaces import MetricInterface
 from ...ecdfs import ECDF
 
@@ -10,7 +8,7 @@ class MedianDifferenceMetric(MetricInterface):
         return abs(gt_dist.get_median_value() - sim_dist.get_median_value())
 
     def __str__(self):
-        return "median_difference"
+        return "medianDifference"
 
     def get_name(self):
         return self.__str__()
