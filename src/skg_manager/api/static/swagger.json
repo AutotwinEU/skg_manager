@@ -333,16 +333,24 @@
           {
             "name": "namespace",
             "in": "query",
-            "description": "namespace of the common data space",
+            "description": "[GROUND TRUTH DATA] namespace of the common data space",
             "required": false,
             "type": "string"
           },
           {
             "name": "drop_rows",
             "in": "query",
-            "description": "Value indicating how inconsistent data should be handled. If drop_rows is true, then a record with incorrect data types is dropped. If drop_rows is false, then incorrect data types are replaced by null (default behavior).",
+            "description": "[GROUND TRUTH DATA] Value indicating how inconsistent data should be handled. If drop_rows is true, then a record with incorrect data types is dropped. If drop_rows is false, then incorrect data types are replaced by null (default behavior).",
             "required": false,
             "type": "boolean"
+          },
+          {
+            "name": "offset",
+            "in": "query",
+            "description": "[SIMULATED DATA] The offset for records of simulated data (format should be %Y-%m-%d)",
+            "required": false,
+            "type": "string",
+            "format": "date"
           }
         ],
         "responses": {
