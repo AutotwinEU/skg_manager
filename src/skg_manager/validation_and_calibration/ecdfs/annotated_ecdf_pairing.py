@@ -145,7 +145,7 @@ class AnnotatedEcdfPairing:
             ELSE ecdfs[1] 
             END AS sim_ecdf
             
-            MERGE (gt_ecdf) - [metric:HAS_METRICS] -> (sim_ecdf)
+            MERGE (gt_ecdf) - [metric:COMPARES_TO] -> (sim_ecdf)
             SET metric = $metric_results
         '''
 
