@@ -1,3 +1,5 @@
+from typing import Optional, List
+
 from promg import Query
 
 
@@ -84,3 +86,23 @@ class StatisticsQueryLibrary:
         '''
 
         return Query(query_str=query_str)
+
+    @staticmethod
+    def get_station_ids_query(station_types: Optional[List[str]] = None) -> Query:
+        if station_types is None:
+            query_str = '''
+                MATCH (n:Station) 
+                WHERE n.sysId is not null
+                RETURN n.sysId as station_id
+            '''
+        else:
+            query_str = '''
+                MATCH (n:Station) 
+                WHERE n.sysId is not null AND n.type IN $station_types
+                RETURN n.sysId as station_id
+            '''
+
+        return Query(
+            query_str=query_str,
+            parameters={"station_types": station_types}
+        )

@@ -1,5 +1,5 @@
 import json
-from typing import List
+from typing import List, Optional
 
 
 def extract_is_simulation_data(route_data) -> bool:
@@ -11,14 +11,21 @@ def extract_is_simulation_data(route_data) -> bool:
 
 
 def extract_entity_types(route_data, default: List[str]) -> List[str]:
-    entity_types = []
-    if "entity_types" in route_data:
-        requested_data = route_data["entity_types"]
-        entity_types = json.loads(requested_data.replace("'", '"'))
-    if not entity_types:
-        entity_types = default
+    return extract_list_of_route_data(route_data, key="entity_types", default=default)
 
-    return entity_types
+
+def extract_list_of_route_data(route_data, key: str, default: Optional[List[str]] = None) -> Optional[List[str]]:
+    if route_data is None:
+        return default
+
+    result = []
+
+    if key in route_data:
+        requested_data = route_data[key]
+        result = json.loads(requested_data.replace("'", '"'))
+    if not result:
+        return default
+    return result
 
 
 def extract_timespan(route_data) -> [str, str]:

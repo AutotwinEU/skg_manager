@@ -18,10 +18,10 @@ class MedianRatioMetric(MetricInterface):
         elif gt_median <= sim_median:
             return 1 - (gt_median / sim_median)
         else:
-            return - 1 + (sim_median / gt_median)
+            return 1 - (sim_median / gt_median)
 
     def __str__(self):
-        return "medianRatio"
+        return "medianRatioScore"
 
     def get_name(self):
         return self.__str__()

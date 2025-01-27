@@ -1,11 +1,15 @@
 import logging
+from typing import List
 
+from ..metrics.metric_interfaces import MetricInterface
 from ..vc_service_interfaces import EcdfWrapperInterface, EcdfServiceInterface
 from ..ecdfs import AnnotatedECDF, AnnotatedEcdfPairing, ECDF
 
 
 class EcdfWrapper(EcdfWrapperInterface):
-    def __init__(self, metric_measures, working_dir,
+    def __init__(self,
+                 metric_measures: List[MetricInterface],
+                 working_dir,
                  ecdf_handler: EcdfServiceInterface):
 
         self.ecdf_handler = ecdf_handler
@@ -16,8 +20,24 @@ class EcdfWrapper(EcdfWrapperInterface):
         self.distribution_pairings = {}
         self.working_dir = working_dir
 
+    def set_db_connection(self, db_connection):
+        self.ecdf_handler.set_db_connection(db_connection=db_connection)
+
     def clear_distribution_pairings(self):
         self.distribution_pairings = {}
+
+    def get_ecdf_type(self):
+        return self._described_behavior
+
+    def get_metrics(self):
+        result = []
+        for metric_measure in self.metric_measures:
+            metric = {
+                "name": metric_measure.get_name(),
+                "optimization_type": metric_measure.get_optimization_direction(),
+            }
+            result.append(metric)
+        return result
 
     # ==============================================================================
     def calculate_ecdfs_from_skg(self, start_time=None, end_time=None) -> None:

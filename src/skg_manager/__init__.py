@@ -5,7 +5,7 @@ from .api.router.interface_routers.oced_pg_router_interface import OcedPgRouterI
 from .api.router.interface_routers.performance_router_interface import PerformanceRouterInterface
 from .api.router.interface_routers.use_case_router_interface import UseCaseRouterInterface
 from .api.router.router_result import Result
-from .generic.service_interfaces.db_manager_interface import DatabaseManagerInterface
+from .generic.service_interfaces.skg_helper_interface import SKGDatabaseHelperInterface
 
 __all__ = [Result,
            DatabaseManagerRouterInterface,
@@ -14,5 +14,5 @@ __all__ = [Result,
            UseCaseRouterInterface,
            DatabaseManagerRouter,
            ConditionalOcedPGRouter,
-           DatabaseManagerInterface
+           SKGDatabaseHelperInterface
            ]

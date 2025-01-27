@@ -1,4 +1,4 @@
-from flask import Blueprint, make_response, Response
+from flask import Blueprint, make_response, Response, request
 
 from ....api.exceptions.exception_handler import db_exception_handler
 from ...router.interface_routers.db_manager_router_interface import DatabaseManagerRouterInterface
@@ -31,6 +31,9 @@ class DatabaseManagerInternalRouter:
                                             methods=['GET'])
         self.db_manager_routes.add_url_rule('/get_model_ids', 'handle_get_model_ids',
                                             view_func=self.handle_get_model_ids,
+                                            methods=['GET'])
+        self.db_manager_routes.add_url_rule('/stations', 'handle_get_station_ids',
+                                            view_func=self.handle_get_station_ids,
                                             methods=['GET'])
 
     @staticmethod
@@ -78,4 +81,11 @@ class DatabaseManagerInternalRouter:
     @db_exception_handler
     def handle_get_model_ids(self) -> Response:
         result = self.implementation.on_get_model_ids()
+        return convert_result_into_response(result)
+
+    @db_exception_handler
+    def handle_get_station_ids(self) -> Response:
+        # request route data
+        route_data = request.args
+        result = self.implementation.on_get_station_ids(route_data)
         return convert_result_into_response(result)

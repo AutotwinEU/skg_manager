@@ -6,10 +6,10 @@ from promg.modules.db_management import DBManagement
 from ..queries.event_log_query_library import EventLogExtractorQueryLibrary as event_log_ql
 from ..queries.index_query_library import IndexQueryLibrary as iql
 from ..queries.statistics_query_library import StatisticsQueryLibrary as sql
-from ..service_interfaces.db_manager_interface import DatabaseManagerInterface
+from ..service_interfaces.skg_helper_interface import SKGDatabaseHelperInterface
 
 
-class SKGDatabaseHelper(DBManagement, DatabaseManagerInterface):
+class SKGDatabaseHelper(DBManagement, SKGDatabaseHelperInterface):
 
     def __init__(self, db_connection: DatabaseConnection, semantic_header=None):
         super().__init__(db_connection, semantic_header)
@@ -77,6 +77,13 @@ class SKGDatabaseHelper(DBManagement, DatabaseManagerInterface):
     def get_model_ids(self):
         model_ids = self.connection.exec_query(sql.get_model_ids_query)
         return model_ids
+
+    def get_station_ids(self, station_types=None):
+        results = self.connection.exec_query(sql.get_station_ids_query,
+                                             **{"station_types": station_types})
+        station_ids = [result["station_id"] for result in results]
+
+        return station_ids
 
     def get_event_log(self, entity_type):
         """

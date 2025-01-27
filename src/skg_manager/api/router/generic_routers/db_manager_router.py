@@ -1,14 +1,15 @@
 from colorama import Fore
 from neo4j.exceptions import ServiceUnavailable
 
-from ....generic.service_interfaces.db_manager_interface import DatabaseManagerInterface
+from .. import extract_list_of_route_data
+from ....generic.service_interfaces.skg_helper_interface import SKGDatabaseHelperInterface
 from ..interface_routers.db_manager_router_interface import DatabaseManagerRouterInterface
 from ..router_result import Result
 
 
 class DatabaseManagerRouter(DatabaseManagerRouterInterface):
 
-    def __init__(self, db_manager: DatabaseManagerInterface):
+    def __init__(self, db_manager: SKGDatabaseHelperInterface):
         self.db_manager = db_manager
 
     def on_clear_db(self) -> Result:
@@ -115,6 +116,22 @@ class DatabaseManagerRouter(DatabaseManagerRouterInterface):
 
     def get_model_ids(self):
         return self.db_manager.get_model_ids()
+
+    def on_get_station_ids(self, route_data=None) -> Result:
+        station_types = extract_list_of_route_data(route_data=route_data, key="station_types", default=None)
+        print(f"station_types: {station_types}")
+        try:
+            station_ids = self.get_station_ids(station_types)
+            if station_ids is None:
+                station_ids = []
+
+            return Result(status=Result.Status.SUCCESS, message="Successfully requested model ids",
+                          data=station_ids)
+        except Exception as e:
+            return Result(status=Result.Status.FAILURE, message=str(e))
+
+    def get_station_ids(self, station_types=None):
+        return self.db_manager.get_station_ids(station_types)
 
     def on_test_connection(self) -> Result:
         try:
