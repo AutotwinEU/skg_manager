@@ -8,7 +8,7 @@ from ..router_result import Result
 class PerformanceRouterInterface(ABC):
 
     @abstractmethod
-    def on_calculate_performance(self) -> Result:
+    def on_calculate_performance(self, route_data) -> Result:
         pass
 
     @abstractmethod

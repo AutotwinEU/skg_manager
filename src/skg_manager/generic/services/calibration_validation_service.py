@@ -15,12 +15,11 @@ class ValidationAndCalibrationService(ValidationAndCalibrationServiceInterface):
         self.db_connection = db_connection
         self.ecdf_wrappers = ecdf_wrappers
 
-    def calculate_performance(self, remove_previous_results):
+    def calculate_performance(self, start_date=None, end_date=None):
         for ecdf_wrapper in self.ecdf_wrappers:
             ecdf_wrapper.set_db_connection(self.db_connection)
-            if remove_previous_results:
-                ecdf_wrapper.remove_ecdfs_from_skg()
-            ecdf_wrapper.calculate_ecdfs_from_skg()
+            ecdf_wrapper.remove_ecdfs_from_skg()
+            ecdf_wrapper.calculate_ecdfs_from_skg(start_time=start_date, end_time=end_date)
             ecdf_wrapper.add_ecdfs_to_skg()
             ecdf_wrapper.create_aggregated_performance_html()
 

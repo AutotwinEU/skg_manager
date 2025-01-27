@@ -25,7 +25,8 @@ class PerformanceInternalRouter:
 
     @db_exception_handler
     def handle_calculate_performance(self) -> Response:
-        result = self.implementation.on_calculate_performance()
+        route_data = request.args
+        result = self.implementation.on_calculate_performance(route_data)
         return convert_result_into_response(result)
 
     @db_exception_handler

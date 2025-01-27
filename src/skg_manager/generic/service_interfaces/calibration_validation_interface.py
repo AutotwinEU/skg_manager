@@ -4,7 +4,7 @@ from typing import Optional
 
 class ValidationAndCalibrationServiceInterface(ABC):
     @abstractmethod
-    def calculate_performance(self, remove_previous_results):
+    def calculate_performance(self, start_date: Optional[str] = None, end_date: Optional[str] = None):
         pass
 
     @abstractmethod

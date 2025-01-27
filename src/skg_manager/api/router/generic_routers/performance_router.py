@@ -12,9 +12,12 @@ class PerformanceRouter(PerformanceRouterInterface):
     def __init__(self, validation_and_calibration_service: ValidationAndCalibrationServiceInterface):
         self.vc_service = validation_and_calibration_service
 
-    def on_calculate_performance(self, remove_previous_results=True) -> Result:
+    def on_calculate_performance(self, route_data) -> Result:
+        start_date = route_data['start_date'] if 'start_date' in route_data else None
+        end_date = route_data['end_date'] if 'end_date' in route_data else None
+
         try:
-            self.vc_service.calculate_performance(remove_previous_results)
+            self.vc_service.calculate_performance(start_date, end_date)
             return Result(status=Result.Status.SUCCESS,
                           message="Successfully created performance_library metrics available at "
                                   "http://localhost:63342/skg_croma/docker/volumes/perfres/index.html")

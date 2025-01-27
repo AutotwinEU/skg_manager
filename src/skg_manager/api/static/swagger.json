@@ -462,7 +462,24 @@
         "produces": [
           "application/json"
         ],
-        "parameters": [],
+        "parameters": [
+          {
+            "name": "start_date",
+            "in": "query",
+            "description": "the start date for which the measures should be calculated. The format should be %Y-%m-%d.",
+            "required": false,
+            "type": "string",
+            "format": "date"
+          },
+          {
+            "name": "end_date",
+            "in": "query",
+            "description": "the end date for which the measures should be calculated.  The format should be %Y-%m-%d.",
+            "required": false,
+            "type": "string",
+            "format": "date"
+          }
+        ],
         "responses": {
           "200": {
             "description": "Successful operation"
@@ -507,7 +524,7 @@
           "application/json"
         ],
         "parameters": [
-           {
+          {
             "name": "ecdf_type",
             "in": "query",
             "description": "the ecdf type for which the metric names should be retrieved",

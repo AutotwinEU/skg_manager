@@ -19,7 +19,7 @@ class EcdfWrapperInterface(ABC):
         pass
 
     @abstractmethod
-    def calculate_ecdfs_from_skg(self):
+    def calculate_ecdfs_from_skg(self, start_time=None, end_time=None):
         pass
 
     @abstractmethod

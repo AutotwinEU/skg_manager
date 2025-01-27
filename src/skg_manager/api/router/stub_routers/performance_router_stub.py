@@ -10,7 +10,7 @@ def not_implemented():
 
 class PerformanceRouterStub(PerformanceRouterInterface):
 
-    def on_calculate_performance(self) -> Result:
+    def on_calculate_performance(self, route_data) -> Result:
         return not_implemented()
 
     def on_retrieve_metrics(self, route_data) -> Result:
