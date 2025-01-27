@@ -39,5 +39,9 @@ class DatabaseManagerInterface(ABC):
         pass
 
     @abstractmethod
+    def get_station_ids(self, station_types):
+        pass
+
+    @abstractmethod
     def get_event_log(self, entity_type):
         pass

@@ -33,5 +33,9 @@ class DatabaseManagerRouterInterface(ABC):
         pass
 
     @abstractmethod
+    def on_get_station_ids(self, route_data = None) -> Result:
+        pass
+
+    @abstractmethod
     def on_test_connection(self) -> Result:
         pass

@@ -226,6 +226,41 @@
         }
       }
     },
+    "/db_manager/stations": {
+      "get": {
+        "tags": [
+          "Retrieval"
+        ],
+        "description": "Returns the station ids for given station types.",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "station_types",
+            "in": "query",
+            "description": "list of station types for which station ids are requested. If station_types is None, then all station ids are requested.",
+            "required": false,
+            "type": "string",
+            "default": "['source', 'process']"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A list of station ids for the given station types"
+          },
+          "400": {
+            "description": "Invalid request data. Given entity type is not supported"
+          },
+          "503": {
+            "description": "Unsuccessful database connectivity"
+          }
+        }
+      }
+    },
     "/db_manager/eventlog/{entity_type}": {
       "get": {
         "tags": [

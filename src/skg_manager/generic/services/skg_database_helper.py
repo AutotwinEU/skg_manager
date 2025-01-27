@@ -78,6 +78,13 @@ class SKGDatabaseHelper(DBManagement, DatabaseManagerInterface):
         model_ids = self.connection.exec_query(sql.get_model_ids_query)
         return model_ids
 
+    def get_station_ids(self, station_types=None):
+        results = self.connection.exec_query(sql.get_station_ids_query,
+                                             **{"station_types": station_types})
+        station_ids = [result["station_id"] for result in results]
+
+        return station_ids
+
     def get_event_log(self, entity_type):
         """
         Create event_log
