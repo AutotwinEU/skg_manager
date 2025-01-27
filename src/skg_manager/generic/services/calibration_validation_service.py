@@ -11,9 +11,10 @@ from ...validation_and_calibration import EcdfWrapperInterface
 
 
 class ValidationAndCalibrationService(ValidationAndCalibrationServiceInterface):
-    def __init__(self, db_connection: DatabaseConnection, ecdf_wrappers: List[EcdfWrapperInterface]):
+    def __init__(self, db_connection: DatabaseConnection, working_dir, ecdf_wrappers: List[EcdfWrapperInterface]):
         self.db_connection = db_connection
         self.ecdf_wrappers = ecdf_wrappers
+        self.working_dir = working_dir
 
     def calculate_performance(self, start_date=None, end_date=None):
         for ecdf_wrapper in self.ecdf_wrappers:
@@ -21,7 +22,7 @@ class ValidationAndCalibrationService(ValidationAndCalibrationServiceInterface):
             ecdf_wrapper.remove_ecdfs_from_skg()
             ecdf_wrapper.calculate_ecdfs_from_skg(start_time=start_date, end_time=end_date)
             ecdf_wrapper.add_ecdfs_to_skg()
-            ecdf_wrapper.create_aggregated_performance_html()
+            ecdf_wrapper.create_aggregated_performance_html(self.working_dir)
 
     def retrieve_mean_metrics(self, ecdf_type):
         metric_results = self.db_connection.exec_query(
@@ -56,4 +57,3 @@ class ValidationAndCalibrationService(ValidationAndCalibrationServiceInterface):
             if ecdf_type is None or ecdf_type == _type:
                 metrics[_type] = ecdf_wrapper.get_metrics()
         return metrics
-

@@ -1,3 +1,4 @@
+import os
 from typing import List, Optional
 from matplotlib import pyplot
 from pandas import DataFrame
@@ -78,6 +79,9 @@ class AnnotatedEcdfPairing:
         return serialized_ecdfs
 
     def plot_to_file(self, working_dir, dpi=80, _format="svg", show=False):
+        if not os.path.exists(working_dir):
+            os.makedirs(working_dir)
+
         plot = self.plot()
         file_name = working_dir + "/" + self.return_title() + "." + _format
         plot.ioff()

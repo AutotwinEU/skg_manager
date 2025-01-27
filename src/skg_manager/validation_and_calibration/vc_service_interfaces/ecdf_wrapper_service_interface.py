@@ -27,5 +27,5 @@ class EcdfWrapperInterface(ABC):
         pass
 
     @abstractmethod
-    def create_aggregated_performance_html(self):
+    def create_aggregated_performance_html(self, working_dir):
         pass
