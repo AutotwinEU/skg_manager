@@ -9,7 +9,6 @@ from ..ecdfs import AnnotatedECDF, AnnotatedEcdfPairing, ECDF
 class EcdfWrapper(EcdfWrapperInterface):
     def __init__(self,
                  metric_measures: List[MetricInterface],
-                 working_dir,
                  ecdf_handler: EcdfServiceInterface):
 
         self.ecdf_handler = ecdf_handler
@@ -18,7 +17,6 @@ class EcdfWrapper(EcdfWrapperInterface):
         self.metric_measures = metric_measures
 
         self.distribution_pairings = {}
-        self.working_dir = working_dir
 
     def set_db_connection(self, db_connection):
         self.ecdf_handler.set_db_connection(db_connection=db_connection)
@@ -112,19 +110,20 @@ class EcdfWrapper(EcdfWrapperInterface):
     def remove_ecdfs_from_skg(self):
         self.ecdf_handler.remove_ecdf_nodes_from_skg()
 
-    def create_aggregated_performance_html(self):
+    def create_aggregated_performance_html(self, working_dir):
         if self.distribution_pairings is None:
             self.retrieve_ecdfs_from_skg()
-        self.create_index_file()
+        self.create_index_file(working_dir)
 
-    def create_index_file(self):
-        f = open(self.working_dir + "/index.html", "w")
+    def create_index_file(self, working_dir):
+        f = open(working_dir + "/index.html", "w")
         f.write(f"<h2>Ecdf for {self._described_behavior}</h2>\n")
         for index, ecdf_pairing in enumerate(self.distribution_pairings.values()):
-            ecdf_pairing.plot_to_file(self.working_dir, show=False)
+            ecdf_pairing.plot_to_file(f"{working_dir}/figures", show=False)
             f.write("<h4>" + self._described_behavior + ": " + ecdf_pairing.return_title() + "\n")
             f.write(
-                f"<a id='eCDF {index}'></h4><img src='{ecdf_pairing.return_title()}.svg'><a href='#top'>back to "
+                f"<a id='eCDF {index}'></h4><img src='figures/{ecdf_pairing.return_title()}.svg'><a href='#top'>back "
+                f"to "
                 f"top<a><br>\n")
 
             f.write("<br>Aggregate values:<br>")
