@@ -17,13 +17,14 @@ from .router.internal_routers.db_manager_internal_router import DatabaseManagerI
 from .router.internal_routers.oced_pg_internal_router import OcedPgInternalRouter
 from .router.internal_routers.performance_internal_router import PerformanceInternalRouter
 from .router.internal_routers.usecase_internal_router import StatusInternalRouter
-from .router.stub_routers.db_manager_router_stub import DatabaseManagerRouterStub
+from .router.internal_routers.kpi_internal_router import KPIInternalRouter
 ## ======================================================
 ## ======================================================
 from .router.stub_routers.oced_pg_router_stub import OcedPgRouterStub
 from .router.stub_routers.performance_router_stub import PerformanceRouterStub
 from .router.stub_routers.use_case_router_stub import UseCaseRouterStub
-
+from .router.stub_routers.db_manager_router_stub import DatabaseManagerRouterStub
+from .router.stub_routers.kpi_router_stub import KPIRouterStub
 
 def init_promg_configuration(semantic_header_path,
                              dataset_description_path,
@@ -65,19 +66,27 @@ class SKGApp:
         self._set_up_config()
         self._set_test_config(test_config=test_config)
 
-        self._registered_blueprints = {
-            "swagger_router": False,
-            "db_manager_router": False,
-            "oced_pg_router": False,
-            "use_case_router": False,
-            "performance_router": False
-        }
+        self._registered_blueprints = {}
+
+    def get_registered_blueprints(self, name):
+        if name not in self._registered_blueprints:
+            self._registered_blueprints[name] = False
+
+        return self._registered_blueprints[name]
+
+    def set_registered_blueprints(self, name, value):
+        if name not in self._registered_blueprints:
+            raise KeyError(f'Key `{name}` is not a known blueprint!')
+
+        self._registered_blueprints[name] = value
 
     def _register_not_set_routers(self):
         self._register_swagger_router()
         self.register_use_case_router()
         self.register_db_manager_router()
         self.register_oced_pg_router()
+        self.register_performance_router()
+        self.register_kpi_router()
 
     def get_app(self):
         self._register_not_set_routers()
@@ -134,34 +143,61 @@ class SKGApp:
         }
 
     def register_db_manager_router(self, db_manager_router=None):
-        if not self._registered_blueprints["db_manager_router"]:
+        router_name = 'db_manager_router'
+        blueprint_is_registered = self.get_registered_blueprints(name=router_name)
+        if not blueprint_is_registered:
             db_manager_router = db_manager_router if db_manager_router is not None else DatabaseManagerRouterStub()
             db_manager_internal_router = DatabaseManagerInternalRouter(implementation=db_manager_router)
             self._app.register_blueprint(db_manager_internal_router.db_manager_routes)
-            self._registered_blueprints["db_manager_router"] = True
+
+            self.set_registered_blueprints(name=router_name, value=True)
 
     def register_oced_pg_router(self, oced_pg_router=None):
-        if not self._registered_blueprints["oced_pg_router"]:
+        router_name = 'oced_pg_router'
+
+        blueprint_is_registered = self.get_registered_blueprints(name=router_name)
+        if not blueprint_is_registered:
             oced_pg_router = oced_pg_router if oced_pg_router is not None else OcedPgRouterStub()
             oced_pg_internal_router = OcedPgInternalRouter(implementation=oced_pg_router)
             self._app.register_blueprint(oced_pg_internal_router.oced_pg_routes)
-            self._registered_blueprints["oced_pg_router"] = True
+
+            self.set_registered_blueprints(name=router_name, value=True)
 
     def register_use_case_router(self, use_case_router=None):
-        if not self._registered_blueprints["use_case_router"]:
+        router_name = 'use_case_router'
+        blueprint_is_registered = self.get_registered_blueprints(name=router_name)
+
+        if not blueprint_is_registered:
             use_case_router = use_case_router if use_case_router is not None else UseCaseRouterStub()
             status_internal_router = StatusInternalRouter(use_case_implementation=use_case_router)
             self._app.register_blueprint(status_internal_router.use_case_routes)
-            self._registered_blueprints["use_case_router"] = True
+
+            self.set_registered_blueprints(name=router_name, value=True)
 
     def _register_swagger_router(self):
-        if not self._registered_blueprints["swagger_router"]:
+        router_name = 'swagger_router'
+        blueprint_is_registered = self.get_registered_blueprints(name=router_name)
+
+        if not blueprint_is_registered:
             self._app.register_blueprint(swagger_ui_blueprint)
-            self._registered_blueprints["swagger_router"] = True
+            self.set_registered_blueprints(name=router_name, value=True)
 
     def register_performance_router(self, performance_router=None):
-        if not self._registered_blueprints["performance_router"]:
+        router_name = 'performance_router'
+        blueprint_is_registered = self.get_registered_blueprints(name=router_name)
+
+        if not blueprint_is_registered:
             performance_router = performance_router if performance_router is not None else PerformanceRouterStub()
             performance_internal_router = PerformanceInternalRouter(implementation=performance_router)
             self._app.register_blueprint(performance_internal_router.performance_routes)
-            self._registered_blueprints["performance_router"] = True
+            self.set_registered_blueprints(name=router_name, value=True)
+
+    def register_kpi_router(self, kpi_router=None):
+        router_name = 'kpi_router'
+        blueprint_is_registered = self.get_registered_blueprints(name=router_name)
+
+        if not blueprint_is_registered:
+            kpi_router = kpi_router if kpi_router is not None else KPIRouterStub()
+            kpi_internal_router = KPIInternalRouter(implementation=kpi_router)
+            self._app.register_blueprint(kpi_internal_router.kpi_routes)
+            self.set_registered_blueprints(name=router_name, value=True)
