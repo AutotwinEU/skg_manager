@@ -30,6 +30,10 @@
     {
       "name": "Performance",
       "description": "Calculates performance statistics"
+    },
+    {
+      "name": "KPI",
+      "description": "Get information about the KPIs"
     }
   ],
   "paths": {
@@ -457,6 +461,101 @@
           },
           "503": {
             "description": "Unsuccessful database connectivity"
+          }
+        }
+      }
+    },
+    "/kpi/names": {
+      "get": {
+        "tags": [
+          "KPI"
+        ],
+        "description": "Retrieve list of available KPI names",
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "Successfully retrieved list of available KPI names"
+          },
+          "400": {
+            "description": "Invalid request data."
+          },
+          "503": {
+            "description": "Unsuccessful request"
+          }
+        }
+      }
+    },
+    "/kpi/{kpi_name}": {
+      "get": {
+        "tags": [
+          "KPI"
+        ],
+        "description": "Retrieve result for a specific KPI name",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "kpi_name",
+            "in": "path",
+            "description": "Name of KPI that is being requested",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "entityType",
+            "in": "query",
+            "description": "Entity type for which KPIs should be calculated",
+            "required": false,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successfully calculated name for KPI"
+          },
+          "400": {
+            "description": "Invalid request data."
+          },
+          "503": {
+            "description": "Unsuccessful request"
+          }
+        }
+      }
+    },
+    "/kpi/results": {
+      "get": {
+        "tags": [
+          "KPI"
+        ],
+        "description": "Retrieve results for all defined KPI names",
+
+        "parameters": [
+          {
+            "name": "entityType",
+            "in": "query",
+            "description": "Entity type for which KPIs should be calculated",
+            "required": false,
+            "type": "string"
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "Successfully calculated name for KPI"
+          },
+          "400": {
+            "description": "Invalid request data."
+          },
+          "503": {
+            "description": "Unsuccessful request"
           }
         }
       }
