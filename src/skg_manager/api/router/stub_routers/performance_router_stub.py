@@ -10,14 +10,17 @@ def not_implemented():
 
 class PerformanceRouterStub(PerformanceRouterInterface):
 
+    def on_show_results(self) -> str:
+        return not_implemented()
+
     def on_calculate_performance(self, route_data) -> Result:
         return not_implemented()
 
-    def on_retrieve_metrics(self, route_data) -> Result:
+    def on_retrieve_mean(self, route_data) -> Result:
         return not_implemented()
 
     def on_get_ecdf_types(self) -> Result:
         return not_implemented()
 
-    def on_get_metric_names(self, route_data) -> Result:
+    def on_get_measure_names(self, route_data) -> Result:
         return not_implemented()
