@@ -1,3 +1,3 @@
-from .ecdf_wrapper_service import EcdfWrapper
+from .calibration_service import CalibrationService
 
-__all__ = [EcdfWrapper]
+__all__ = [CalibrationService]
