@@ -1,7 +1,7 @@
 {
   "swagger": "2.0",
   "info": {
-    "title": "SKG Manager for Croma API",
+    "title": "SKG Manager for Generic API",
     "version": "v1.0.0"
   },
   "host": "localhost:8080",
@@ -618,12 +618,12 @@
         }
       }
     },
-    "/performance/get_metric_names": {
+    "/performance/get_measure_names": {
       "get": {
         "tags": [
           "Performance"
         ],
-        "description": "Retrieves the metric names and the optimization direction of the calculated measures per ecdf type",
+        "description": "Retrieves the measure names and the optimization direction of the calculated measures per ecdf type",
         "consumes": [
           "application/json"
         ],
@@ -634,14 +634,14 @@
           {
             "name": "ecdf_type",
             "in": "query",
-            "description": "the ecdf type for which the metric names should be retrieved",
+            "description": "the ecdf type for which the measure names should be retrieved",
             "required": false,
             "type": "string"
           }
         ],
         "responses": {
           "200": {
-            "description": "A list of metric names and their optimization direction is given for the ecdf type"
+            "description": "A list of measure names and their optimization direction is given for the ecdf type"
           },
           "503": {
             "description": "Unsuccessful database connectivity"
@@ -649,12 +649,12 @@
         }
       }
     },
-    "/performance/get_mean_metric_results": {
+    "/performance/get_mean_measure_results": {
       "get": {
         "tags": [
           "Performance"
         ],
-        "description": "Retrieves the mean metrics per ecdf_type",
+        "description": "Retrieves the mean measure per ecdf_type",
         "consumes": [
           "application/json"
         ],
@@ -665,14 +665,14 @@
           {
             "name": "ecdf_type",
             "in": "query",
-            "description": "the ecdf type for which the metrics should be retrieved",
+            "description": "the ecdf type for which the measures should be retrieved",
             "required": false,
             "type": "string"
           }
         ],
         "responses": {
           "200": {
-            "description": "A list of metric values is given for the ecdf type"
+            "description": "A list of measure values is given for the ecdf type"
           },
           "503": {
             "description": "Unsuccessful database connectivity"
