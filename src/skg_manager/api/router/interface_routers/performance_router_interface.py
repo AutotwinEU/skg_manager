@@ -1,4 +1,5 @@
 from abc import ABC, abstractmethod
+from typing import Tuple
 
 from promg import DatabaseConnection
 
@@ -8,11 +9,11 @@ from ..router_result import Result
 class PerformanceRouterInterface(ABC):
 
     @abstractmethod
-    def on_calculate_performance(self, route_data) -> Result:
+    def on_show_results(self) -> str:
         pass
 
     @abstractmethod
-    def on_retrieve_metrics(self, route_data) -> Result:
+    def on_retrieve_mean(self, route_data) -> Result:
         pass
 
     @abstractmethod
@@ -20,5 +21,5 @@ class PerformanceRouterInterface(ABC):
         pass
 
     @abstractmethod
-    def on_get_metric_names(self, route_data) -> Result:
+    def on_get_measure_names(self, route_data) -> Result:
         pass
