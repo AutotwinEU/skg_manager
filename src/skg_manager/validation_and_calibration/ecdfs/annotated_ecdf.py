@@ -14,6 +14,23 @@ class AnnotatedECDF(ECDF):
 
         self._linked_element_id = element_id
 
+    @staticmethod
+    def create_from_query_result(query_result, ecdf_name):
+        gt_sim = "sim" if query_result['is_simulated_data'] else "gt"
+        key = query_result["key"]
+        dist_values = query_result["dist_values"]
+        element_id = query_result["element_id"]
+        entity_type = query_result["entity_type"]
+
+        # Create ECDF object
+        return AnnotatedECDF(values=dist_values,
+                             legend=f"{ecdf_name}: {key}",
+                             key=key,
+                             entity_type=entity_type,
+                             element_id=element_id,
+                             _type=ecdf_name,
+                             gt_sim=gt_sim)
+
     # add magic method for sorting
     def __lt__(self, other):
         return self.__legend < other.get_legend()
