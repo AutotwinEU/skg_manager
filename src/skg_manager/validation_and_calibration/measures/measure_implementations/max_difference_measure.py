@@ -1,8 +1,8 @@
-from ..metric_interfaces import MetricInterface
+from ..measure_interfaces import MeasureInterface
 from ...ecdfs import ECDF
 
 
-class MaximumDifferenceMetric(MetricInterface):
+class MaximumDifferenceMeasure(MeasureInterface):
     def calculate(self, gt_dist: ECDF, sim_dist: ECDF):
         # returns the Kolmogorov distance between two eCDFs
         return abs(gt_dist.get_max_value() - sim_dist.get_max_value())

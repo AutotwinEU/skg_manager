@@ -5,18 +5,18 @@ from pandas import DataFrame
 from promg import Query
 
 from .annotated_ecdf import AnnotatedECDF
-from skg_manager.validation_and_calibration.metrics.metric_interfaces.metric_interface import MetricInterface
+from ..measures.measure_interfaces.measure_interface import MeasureInterface
 
 
 # a collection of Ecdf_s plus a title, e.g., for plotting on the screen or write as image to file
 class AnnotatedEcdfPairing:
-    def __init__(self, title="", metrics: Optional[List[MetricInterface]] = None):
+    def __init__(self, title="", measures: Optional[List[MeasureInterface]] = None):
         # EV: Sort the different graphs on the gt_sim value.
         self.__title = title
-        self.__metrics = metrics
+        self.__measures = measures
         self.__gt_dist: Optional[AnnotatedECDF] = None
         self.__sim_dist: Optional[AnnotatedECDF] = None
-        self.__metric_results = None
+        self.__measure_results = None
 
     def get_gt_dist(self):
         return self.__gt_dist
@@ -28,10 +28,10 @@ class AnnotatedEcdfPairing:
         distributions = [self.__gt_dist, self.__sim_dist]
         return [dist for dist in distributions if dist is not None]
 
-    def get_metric_results(self):
-        if self.__metric_results is None:
-            self.calculate_metrics()
-        return self.__metric_results
+    def get_measure_results(self):
+        if self.__measure_results is None:
+            self.calculate_measures()
+        return self.__measure_results
 
     def return_title(self):
         return self.__title
@@ -39,15 +39,15 @@ class AnnotatedEcdfPairing:
     def get_key(self):
         return [self.__gt_dist.get_legend(), self.__sim_dist.get_legend()]
 
-    def calculate_metrics(self):
-        self.__metric_results = {}
+    def calculate_measures(self):
+        self.__measure_results = {}
 
         if self.__gt_dist is None or self.__sim_dist is None:
             return
         else:
-            for metric in self.__metrics:
-                metric_value = metric.calculate(self.__gt_dist, self.__sim_dist)
-                self.__metric_results[metric.get_name()] = metric_value
+            for measure in self.__measures:
+                measure_value = measure.calculate(self.__gt_dist, self.__sim_dist)
+                self.__measure_results[measure.get_name()] = measure_value
 
     def add_dist(self, dist):
         if dist.get_gt_sim() == "gt":
@@ -105,10 +105,10 @@ class AnnotatedEcdfPairing:
         df_dist_data = DataFrame(dist_data)
         return df_dist_data
 
-    def get_metric_comparison_table(self):
-        metric_data = self.get_metric_results()
-        metric_data = DataFrame([metric_data])
-        return metric_data
+    def get_measure_comparison_table(self):
+        measure_results = self.get_measure_results()
+        measure_df = DataFrame([measure_results])
+        return measure_df
 
     def get_type(self):
         if self.__gt_dist is not None:
@@ -149,8 +149,8 @@ class AnnotatedEcdfPairing:
             ELSE ecdfs[1] 
             END AS sim_ecdf
             
-            MERGE (gt_ecdf) - [metric:COMPARES_TO] -> (sim_ecdf)
-            SET metric = $metric_results
+            MERGE (gt_ecdf) - [measure:COMPARES_TO] -> (sim_ecdf)
+            SET measure = $measure_results
         '''
 
         return Query(query_str=query_str,
@@ -158,5 +158,5 @@ class AnnotatedEcdfPairing:
                          "name": self.__title,
                          "type": self.get_type(),
                          "distributions": self.get_dists_to_store_in_skg(),
-                         "metric_results": self.get_metric_results()
+                         "measure_results": self.get_measure_results()
                      })

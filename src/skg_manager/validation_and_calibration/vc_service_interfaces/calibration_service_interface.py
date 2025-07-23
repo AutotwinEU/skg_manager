@@ -6,5 +6,5 @@ class CalibrationServiceInterface(ABC):
         self.db_connection = db_connection
 
     @abstractmethod
-    def on_evaluate_metrics(self, ecdf_type):
+    def on_evaluate_measures(self, ecdf_type):
         pass

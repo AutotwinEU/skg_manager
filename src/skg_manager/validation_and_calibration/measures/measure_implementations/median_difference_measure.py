@@ -1,14 +1,14 @@
-from ..metric_interfaces import MetricInterface
+from ..measure_interfaces import MeasureInterface
 from ...ecdfs import ECDF
 
 
-class MinimumDifferenceMetric(MetricInterface):
+class MedianDifferenceMeasure(MeasureInterface):
     def calculate(self, gt_dist: ECDF, sim_dist: ECDF):
         # returns the Kolmogorov distance between two eCDFs
-        return abs(gt_dist.get_min_value() - sim_dist.get_min_value())
+        return abs(gt_dist.get_median_value() - sim_dist.get_median_value())
 
     def __str__(self):
-        return "minimumDifference"
+        return "medianDifference"
 
     def get_name(self):
         return self.__str__()

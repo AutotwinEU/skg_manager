@@ -70,19 +70,19 @@ class PerformanceQueryLibrary:
                      template_string_parameters={"name": name})
 
     @staticmethod
-    def get_get_metrics_query(ecdf_type: Optional[str] = None):
+    def get_measures_query(ecdf_type: Optional[str] = None):
         if ecdf_type is None:
             query_str = '''
-                MATCH (n_gt:ECDF {source:"gt"}) - [metrics:COMPARES_TO] -> (n_sim:ECDF {source:"sim"})
-                WITH n_gt.type as ecdf_type, properties(metrics) as conformance_metrics
-                RETURN ecdf_type, collect(conformance_metrics) as metrics
+                MATCH (n_gt:ECDF {source:"gt"}) - [measures:COMPARES_TO] -> (n_sim:ECDF {source:"sim"})
+                WITH n_gt.type as ecdf_type, properties(measures) as conformance_measures
+                RETURN ecdf_type, collect(conformance_measures) as measures
             '''
         else:
             query_str = '''
-                MATCH (n_gt:ECDF {source:"gt"}) - [metrics:COMPARES_TO] -> (n_sim:ECDF {source:"sim"})
+                MATCH (n_gt:ECDF {source:"gt"}) - [measures:COMPARES_TO] -> (n_sim:ECDF {source:"sim"})
                 WHERE n_gt.type = $ecdf_type
-                WITH n_gt.type as ecdf_type, properties(metrics) as conformance_metrics
-                RETURN ecdf_type, collect(conformance_metrics) as metrics
+                WITH n_gt.type as ecdf_type, properties(measures) as conformance_measures
+                RETURN ecdf_type, collect(conformance_measures) as measures
             '''
         return Query(query_str=query_str,
                      parameters={"ecdf_type": ecdf_type})
