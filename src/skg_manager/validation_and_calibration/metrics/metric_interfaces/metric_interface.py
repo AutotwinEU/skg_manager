@@ -7,7 +7,7 @@ from ...measures.measure_interfaces import MeasureInterface
 
 
 class MetricInterface(ABC):
-    def __init__(self, name: str, measures: List[MeasureInterface]):
+    def __init__(self, name: str, measures: List[MeasureInterface], used_for_calibration=False):
         self.name = name
         self.measures = measures
         self.result = None
@@ -18,11 +18,7 @@ class MetricInterface(ABC):
     # Abstract Methods #
     ####################
     @abstractmethod
-    def clear_result(self):
-        pass
-
-    @abstractmethod
-    def calculate_result(self, start_time=None, end_time=None):
+    def calculate_result(self, start_time, end_time):
         pass
 
     @abstractmethod
@@ -32,6 +28,11 @@ class MetricInterface(ABC):
     #######################
     # Implemented Methods #
     #######################
+    def has_result(self):
+        return self.result is not None
+
+    def clear_result(self):
+        self.result = None
 
     def set_db_connection(self, db_connection: DatabaseConnection):
         self.db_connection = db_connection
@@ -57,6 +58,8 @@ class MetricInterface(ABC):
 
     def get_measures(self):
         result = []
+        if self.measures is None:
+            return []
         for measure in self.measures:
             measure = {
                 "name": measure.get_name(),
@@ -64,3 +67,13 @@ class MetricInterface(ABC):
             }
             result.append(measure)
         return result
+
+    def get_measure_results(self):
+        if self.measures is None:
+            return None
+        assert hasattr(self, '_get_measure_results') and callable(self._get_measure_results), \
+            "_get_measure_results must be implemented when measures is defined"
+        return self._get_measure_results()
+
+    def _get_measure_results(self):
+        raise NotImplementedError
