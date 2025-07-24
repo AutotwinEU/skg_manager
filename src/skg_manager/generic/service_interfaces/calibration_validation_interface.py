@@ -4,7 +4,7 @@ from typing import Optional, Tuple
 
 class ValidationAndCalibrationServiceInterface(ABC):
     @abstractmethod
-    def render_validation_template(self):
+    def render_validation_template(self) -> str:
         pass
 
     @abstractmethod
@@ -12,13 +12,13 @@ class ValidationAndCalibrationServiceInterface(ABC):
         pass
 
     @abstractmethod
-    def retrieve_mean(self, ecdf_type: Optional[str]):
+    def retrieve_mean_of_measures(self, metric_name: Optional[str]):
         pass
 
     @abstractmethod
-    def get_ecdf_types(self):
+    def get_metric_names(self):
         pass
 
     @abstractmethod
-    def get_measure_names(self, ecdf_type: Optional[str]):
+    def get_measure_names(self, metric_name: Optional[str]):
         pass
