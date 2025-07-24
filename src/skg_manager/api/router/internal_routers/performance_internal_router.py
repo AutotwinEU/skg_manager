@@ -13,11 +13,11 @@ class PerformanceInternalRouter:
         self.performance_routes.add_url_rule("/run", "handle_calculate_performance",
                                              view_func=self.handle_calculate_performance,
                                              methods=["POST"])
-        self.performance_routes.add_url_rule("/get_mean", "handle_retrieve_mean",
-                                             view_func=self.handle_retrieve_mean,
+        self.performance_routes.add_url_rule("/get_mean_metric_results", "handle_retrieve_mean_of_measures",
+                                             view_func=self.handle_retrieve_mean_of_measures,
                                              methods=["GET"])
-        self.performance_routes.add_url_rule("/get_ecdf_types", "handle_get_ecdf_types",
-                                             view_func=self.handle_get_ecdf_types,
+        self.performance_routes.add_url_rule("/get_metric_names", "handle_get_metric_names",
+                                             view_func=self.handle_get_metric_names,
                                              methods=["GET"])
         self.performance_routes.add_url_rule("/get_measure_names", "handle_get_measure_names",
                                              view_func=self.handle_get_measure_names,
@@ -32,14 +32,14 @@ class PerformanceInternalRouter:
         return convert_result_into_response(result)
 
     @db_exception_handler
-    def handle_retrieve_mean(self) -> Response:
+    def handle_retrieve_mean_of_measures(self) -> Response:
         route_data = request.args
-        result = self.implementation.on_retrieve_mean(route_data)
+        result = self.implementation.on_retrieve_mean_of_measures(route_data)
         return convert_result_into_response(result)
 
     @db_exception_handler
-    def handle_get_ecdf_types(self) -> Response:
-        result = self.implementation.on_get_ecdf_types()
+    def handle_get_metric_names(self) -> Response:
+        result = self.implementation.on_get_metric_names()
         return convert_result_into_response(result)
 
     @db_exception_handler

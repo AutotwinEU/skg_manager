@@ -1,10 +1,6 @@
-from typing import List, Tuple
-
-from flask import Response, render_template, send_file
-from promg import DatabaseConnection
+from flask import Response
 
 from ....generic.service_interfaces.calibration_validation_interface import ValidationAndCalibrationServiceInterface
-from ....validation_and_calibration import MetricInterface
 from ..interface_routers.performance_router_interface import PerformanceRouterInterface
 from ..router_result import Result
 
@@ -27,33 +23,33 @@ class PerformanceRouter(PerformanceRouterInterface):
         except Exception as e:
             return Result(status=Result.Status.FAILURE, message=str(e))
 
-    def on_retrieve_mean(self, route_data) -> Result:
-        ecdf_type = route_data['ecdf_type'] if 'ecdf_type' in route_data else None
+    def on_retrieve_mean_of_measures(self, route_data) -> Result:
+        metric_name = route_data['metric_name'] if 'metric_name' in route_data else None
         try:
-            result = self.vc_service.retrieve_mean(ecdf_type)
+            result = self.vc_service.retrieve_mean_of_measures(metric_name)
             return Result(status=Result.Status.SUCCESS,
                           message="Successfully retrieved mean",
                           data=result)
         except Exception as e:
             return Result(status=Result.Status.FAILURE, message=str(e))
 
-    def on_get_ecdf_types(self):
+    def on_get_metric_names(self):
         try:
-            result = self.vc_service.get_ecdf_types()
+            result = self.vc_service.get_metric_names()
             return Result(status=Result.Status.SUCCESS,
-                          message="Successfully retrieved ecdf types",
+                          message="Successfully retrieved metric names",
                           data=result)
 
         except Exception as e:
             return Result(status=Result.Status.FAILURE, message=str(e))
 
     def on_get_measure_names(self, route_data):
-        ecdf_type = route_data['ecdf_type'] if 'ecdf_type' in route_data else None
+        metric_name = route_data['metric_name'] if 'metric_name' in route_data else None
 
         try:
-            result = self.vc_service.get_measure_names(ecdf_type=ecdf_type)
+            result = self.vc_service.get_measure_names(metric_name=metric_name)
             return Result(status=Result.Status.SUCCESS,
-                          message="Successfully retrieved ecdf types",
+                          message="Successfully retrieved measures for metric names",
                           data=result)
 
         except Exception as e:

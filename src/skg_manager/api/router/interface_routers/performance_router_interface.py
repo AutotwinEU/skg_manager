@@ -9,15 +9,19 @@ from ..router_result import Result
 class PerformanceRouterInterface(ABC):
 
     @abstractmethod
+    def on_calculate_performance(self, route_data) -> Result:
+        pass
+
+    @abstractmethod
     def on_show_results(self) -> str:
         pass
 
     @abstractmethod
-    def on_retrieve_mean(self, route_data) -> Result:
+    def on_retrieve_mean_of_measures(self, route_data) -> Result:
         pass
 
     @abstractmethod
-    def on_get_ecdf_types(self) -> Result:
+    def on_get_metric_names(self) -> Result:
         pass
 
     @abstractmethod
