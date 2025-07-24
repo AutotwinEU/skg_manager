@@ -16,7 +16,11 @@ def check_datetime_is_correct_format(timestamp):
         is_date_time = False
     return is_date_time
 
-def check_start_and_end_times(start_time, end_time):
+
+def get_start_and_end_times(start_date=None, end_date=None):
+    start_time = start_date
+    end_time = end_date
+
     if start_time is None:
         start_time = "1970-01-01 00:00:00"
     if end_time is None:
@@ -36,4 +40,3 @@ def check_start_and_end_times(start_time, end_time):
             f"start_time: {end_time} is of incorrect format, it should be %Y-%m-%d or %Y-%m-%d %H:%M:%S")
 
     return start_time, end_time
-
