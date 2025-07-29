@@ -21,7 +21,7 @@ class ValidationAndCalibrationService(ValidationAndCalibrationServiceInterface):
         start_time, end_time = get_start_and_end_times()
         metric_results = []
         for metric in self.metrics:
-            if not metric.has_result(): # calculate results if not defined
+            if not metric.has_result():  # calculate results if not defined
                 metric.set_db_connection(self.db_connection)
                 metric.calculate_result(start_time=start_time, end_time=end_time)
             metric_results.append(metric.get_dict_repr())
@@ -29,11 +29,14 @@ class ValidationAndCalibrationService(ValidationAndCalibrationServiceInterface):
         return render_template('performance_results.html',
                                metrics=metric_results)
 
-    def calculate_performance(self, start_date=None, end_date=None):
+    def calculate_performance(self, start_date=None, end_date=None, used_for_calibration=True):
         for metric in self.metrics:
-            metric.set_db_connection(self.db_connection)
-            start_time, end_time = get_start_and_end_times(start_date, end_date)
-            metric.calculate_result(start_time=start_time, end_time=end_time)
+            # first, not used_for_calibration --> determine all metrices, also those not used for calibration
+            # OR calculate those metrics used for calibration
+            if not used_for_calibration or metric.used_for_calibration:
+                metric.set_db_connection(self.db_connection)
+                start_time, end_time = get_start_and_end_times(start_date, end_date)
+                metric.calculate_result(start_time=start_time, end_time=end_time)
 
     def get_metric_names(self):
         metrics = []
@@ -57,4 +60,3 @@ class ValidationAndCalibrationService(ValidationAndCalibrationServiceInterface):
                 if measure_results is not None:
                     pivot_results[name] = measure_results
         return pivot_results
-
