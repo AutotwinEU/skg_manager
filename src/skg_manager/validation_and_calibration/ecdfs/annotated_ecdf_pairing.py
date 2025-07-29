@@ -1,6 +1,6 @@
 import os
 from typing import List, Optional
-from matplotlib import pyplot
+from matplotlib import pyplot as plt
 from pandas import DataFrame
 from promg import Query
 
@@ -91,14 +91,14 @@ class AnnotatedEcdfPairing:
             plot.show()
 
     def plot(self):
-        pyplot.clf()
+        plt.clf() # clear the figure
         legend = []
         for dist in self.get_distributions():
             legend = dist.plot_cdf(legend)
 
-        pyplot.legend(legend, loc="lower right", fontsize="6")
-        pyplot.title(self.return_title())
-        return pyplot
+        plt.legend(legend, loc="lower right", fontsize="6")
+        plt.title(self.return_title())
+        return plt
 
     def get_distribution_characteristics_table(self):
         dist_data = [dist.as_dict() for dist in self.get_distributions()]
