@@ -15,9 +15,10 @@ class PerformanceRouter(PerformanceRouterInterface):
     def on_calculate_performance(self, route_data) -> Result:
         start_date = route_data['start_date'] if 'start_date' in route_data else None
         end_date = route_data['end_date'] if 'end_date' in route_data else None
-
+        # default is used for calibration
+        used_for_calibration = route_data['used_for_calibration'] if 'used_for_calibration' in route_data else True
         try:
-            self.vc_service.calculate_performance(start_date, end_date)
+            self.vc_service.calculate_performance(start_date, end_date, used_for_calibration)
             return Result(status=Result.Status.SUCCESS,
                           message="Successfully created performance results")
         except Exception as e:
