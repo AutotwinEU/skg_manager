@@ -13,7 +13,7 @@ class PerformanceInternalRouter:
         self.performance_routes.add_url_rule("/run", "handle_calculate_performance",
                                              view_func=self.handle_calculate_performance,
                                              methods=["POST"])
-        self.performance_routes.add_url_rule("/get_mean_metric_results", "handle_retrieve_mean_of_measures",
+        self.performance_routes.add_url_rule("/get_mean_of_measures", "handle_retrieve_mean_of_measures",
                                              view_func=self.handle_retrieve_mean_of_measures,
                                              methods=["GET"])
         self.performance_routes.add_url_rule("/get_metric_names", "handle_get_metric_names",
