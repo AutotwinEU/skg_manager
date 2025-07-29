@@ -20,7 +20,7 @@ else:
 setup(
     name='skg_manager',
     version=str(verstr),
-    description='Pyhton library to build a generic skg manager api and some generic functions',
+    description='Python library to build a generic skg manager api and some generic functions',
     author='A. Swevels, D.Fahland',
     python_requires='>=3.8',
     install_requires=['neo4j', 'numpy', 'pandas', 'promg', 'requests', 'flask-swagger-ui', 'flask'],
@@ -30,6 +30,5 @@ setup(
     packages=find_packages(
         where='src',
         include=['skg_manager*']),
-    package_dir={"": "src"},
-    package_data={'skg_manager': ['api/static/swagger.json']}
+    package_dir={"": "src"}
 )

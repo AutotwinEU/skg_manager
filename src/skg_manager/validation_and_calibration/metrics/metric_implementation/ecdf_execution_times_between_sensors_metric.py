@@ -1,11 +1,24 @@
+from typing import List, Optional
+
 from promg import Query
 
-from skg_manager.validation_and_calibration.vc_service_interfaces.ecdf_service_interface import EcdfServiceInterface
+from ...measures.measure_interfaces import MeasureInterface
+from ...measures.measure_implementations import (KolmogorovMeasure, MedianRatioMeasure, SimilarityMeasure,
+                                                 WassersteinDistanceMeasure, AverageDifferenceMeasure,
+                                                 MedianDifferenceMeasure, MinimumDifferenceMeasure,
+                                                 MaximumDifferenceMeasure)
+from ..metric_interfaces.ecdf_metric_interface import EcdfMetricInterface
 
 
-class ExecutionTimesBetweenSensorsEcdfHandler(EcdfServiceInterface):
-    def __init__(self):
-        super().__init__(described_behavior="Execution Times Between Sensors")
+class ExecutionTimesBetweenSensorsEcdfMetric(EcdfMetricInterface):
+    def __init__(self, measures: Optional[List[MeasureInterface]] = None):
+        name = "Execution Times Between Sensors"
+        if measures is None:
+            measures = [KolmogorovMeasure(), MedianRatioMeasure(), SimilarityMeasure(),
+                        WassersteinDistanceMeasure(), AverageDifferenceMeasure(), MedianDifferenceMeasure(),
+                        MinimumDifferenceMeasure(), MaximumDifferenceMeasure()]
+        super().__init__(name=name,
+                         measures=measures)
 
     def extract_ecdf_query_function(self, start_time="1970-01-01 00:00:00", end_time="2970-01-01 23:59:59"):
         """
@@ -25,8 +38,9 @@ class ExecutionTimesBetweenSensorsEcdfHandler(EcdfServiceInterface):
 
         query_str = '''
             MATCH (e1:Event) - [r:DF_CONTROL_FLOW_ITEM] -> (e2)
-            WHERE e1.simulated = True OR (e1.timestamp >= datetime(apoc.date.convertFormat($start_time,"yyyy-MM-dd HH:mm:ss","ISO_DATE_TIME")) 
-            AND e2.timestamp <= datetime(apoc.date.convertFormat($end_time,"yyyy-MM-dd HH:mm:ss","ISO_DATE_TIME"))) 
+            WHERE e1.simulated = True OR 
+                (e1.timestamp >= datetime(apoc.date.convertFormat($start_time,"yyyy-MM-dd HH:mm:ss","ISO_DATE_TIME")) 
+                AND e2.timestamp <= datetime(apoc.date.convertFormat($end_time,"yyyy-MM-dd HH:mm:ss","ISO_DATE_TIME"))) 
             MATCH (e1) - [:ACTS_ON] -> (k) - [:IS_OF_TYPE] -> (et)
             MATCH (e1)-[:EXECUTED_BY]->(s1:Sensor)
             MATCH (e2)-[:EXECUTED_BY]->(s2:Sensor)

@@ -1,14 +1,16 @@
-from ..metric_interfaces import MetricInterface
+from scipy.stats import stats
+
+from ..measure_interfaces import MeasureInterface
 from ...ecdfs import ECDF
 
 
-class AverageDifferenceMetric(MetricInterface):
+class KolmogorovMeasure(MeasureInterface):
     def calculate(self, gt_dist: ECDF, sim_dist: ECDF):
         # returns the Kolmogorov distance between two eCDFs
-        return abs(gt_dist.get_avg_value() - sim_dist.get_avg_value())
+        return stats.ks_2samp(gt_dist.get_values(), sim_dist.get_values()).pvalue
 
     def __str__(self):
-        return "averageDifference"
+        return "kolmogorovScore"
 
     def get_name(self):
         return self.__str__()
@@ -17,4 +19,4 @@ class AverageDifferenceMetric(MetricInterface):
         return self.__str__()
 
     def get_optimization_direction(self):
-        return "MIN"
+        return "MAX"

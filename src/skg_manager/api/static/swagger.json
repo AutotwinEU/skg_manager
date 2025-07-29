@@ -1,7 +1,7 @@
 {
   "swagger": "2.0",
   "info": {
-    "title": "SKG Manager for Croma API",
+    "title": "SKG Manager for Generic API",
     "version": "v1.0.0"
   },
   "host": "localhost:8080",
@@ -534,7 +534,6 @@
           "KPI"
         ],
         "description": "Retrieve results for all defined KPI names",
-
         "parameters": [
           {
             "name": "entityType",
@@ -585,6 +584,14 @@
             "required": false,
             "type": "string",
             "format": "date"
+          },
+          {
+            "name": "used_for_calibration",
+            "in": "query",
+            "description": "whether the performance is used for calibration. In that case, it will only calculate the metrics relevant for calibration and exclude the validation metrics.",
+            "required": false,
+            "type": "boolean",
+            "default": true
           }
         ],
         "responses": {
@@ -594,26 +601,24 @@
         }
       }
     },
-    "/performance/get_ecdf_types": {
+    "/performance/show_results": {
       "get": {
         "tags": [
           "Performance"
         ],
-        "description": "Retrieves the ecdf types present in the graph",
+        "description": "Shows the HTML page of the results",
         "consumes": [
           "application/json"
         ],
         "produces": [
-          "application/json"
-        ],
-        "parameters": [
+          "application/html"
         ],
         "responses": {
           "200": {
-            "description": "A list of ecdf types present in the database"
+            "description": "Successfully retrieved HTML page"
           },
-          "503": {
-            "description": "Unsuccessful database connectivity"
+          "404": {
+            "description": "Unsuccessful"
           }
         }
       }
@@ -623,7 +628,7 @@
         "tags": [
           "Performance"
         ],
-        "description": "Retrieves the metric names and the optimization direction of the calculated measures per ecdf type",
+        "description": "Retrieves the names of the available metrics",
         "consumes": [
           "application/json"
         ],
@@ -631,17 +636,10 @@
           "application/json"
         ],
         "parameters": [
-          {
-            "name": "ecdf_type",
-            "in": "query",
-            "description": "the ecdf type for which the metric names should be retrieved",
-            "required": false,
-            "type": "string"
-          }
         ],
         "responses": {
           "200": {
-            "description": "A list of metric names and their optimization direction is given for the ecdf type"
+            "description": "A list of metric names"
           },
           "503": {
             "description": "Unsuccessful database connectivity"
@@ -649,12 +647,12 @@
         }
       }
     },
-    "/performance/get_mean_metric_results": {
+    "/performance/get_measure_names": {
       "get": {
         "tags": [
           "Performance"
         ],
-        "description": "Retrieves the mean metrics per ecdf_type",
+        "description": "Retrieves the measure names and the optimization direction of the calculated measures per metric",
         "consumes": [
           "application/json"
         ],
@@ -663,16 +661,47 @@
         ],
         "parameters": [
           {
-            "name": "ecdf_type",
+            "name": "metric_name",
             "in": "query",
-            "description": "the ecdf type for which the metrics should be retrieved",
+            "description": "the metric name for which the measure names should be retrieved",
             "required": false,
             "type": "string"
           }
         ],
         "responses": {
           "200": {
-            "description": "A list of metric values is given for the ecdf type"
+            "description": "A list of measure names and their optimization direction is given for the metric"
+          },
+          "503": {
+            "description": "Unsuccessful database connectivity"
+          }
+        }
+      }
+    },
+    "/performance/get_mean_of_measures": {
+      "get": {
+        "tags": [
+          "Performance"
+        ],
+        "description": "Retrieves the mean of the measures for each of the metric name",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "metric_name",
+            "in": "query",
+            "description": "the name of the metric for which the mean should be retrieved",
+            "required": false,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A list of the mean values of the different measures is given for the metric name"
           },
           "503": {
             "description": "Unsuccessful database connectivity"

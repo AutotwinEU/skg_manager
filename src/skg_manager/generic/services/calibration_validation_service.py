@@ -1,59 +1,62 @@
 from abc import ABC, abstractmethod
-from typing import List, Optional
+from typing import List, Optional, Tuple
 
 import pandas as pd
+from flask import Response, render_template
 from promg import DatabaseConnection
 
 from ..service_interfaces.calibration_validation_interface import \
     ValidationAndCalibrationServiceInterface
-from ..queries.performance_queries import PerformanceQueryLibrary as pql
-from ...validation_and_calibration import EcdfWrapperInterface
+from ...validation_and_calibration import MetricInterface
+from .helper_functions import get_start_and_end_times
 
 
 class ValidationAndCalibrationService(ValidationAndCalibrationServiceInterface):
-    def __init__(self, db_connection: DatabaseConnection, working_dir, ecdf_wrappers: List[EcdfWrapperInterface]):
+    def __init__(self, db_connection: DatabaseConnection, metrics: List[MetricInterface]):
         self.db_connection = db_connection
-        self.ecdf_wrappers = ecdf_wrappers
-        self.working_dir = working_dir
+        self.metrics = metrics
+        self.tabs = []
 
-    def calculate_performance(self, start_date=None, end_date=None):
-        for ecdf_wrapper in self.ecdf_wrappers:
-            ecdf_wrapper.set_db_connection(self.db_connection)
-            ecdf_wrapper.remove_ecdfs_from_skg()
-            ecdf_wrapper.calculate_ecdfs_from_skg(start_time=start_date, end_time=end_date)
-            ecdf_wrapper.add_ecdfs_to_skg()
-            ecdf_wrapper.create_aggregated_performance_html(self.working_dir)
+    def render_validation_template(self) -> str:
+        start_time, end_time = get_start_and_end_times()
+        metric_results = []
+        for metric in self.metrics:
+            if not metric.has_result():  # calculate results if not defined
+                metric.set_db_connection(self.db_connection)
+                metric.calculate_result(start_time=start_time, end_time=end_time)
+            metric_results.append(metric.get_dict_repr())
 
-    def retrieve_mean_metrics(self, ecdf_type):
-        metric_results = self.db_connection.exec_query(
-            pql.get_get_metrics_query,
-            **{"ecdf_type": ecdf_type}
-        )
+        return render_template('performance_results.html',
+                               metrics=metric_results)
 
-        print(metric_results)
+    def calculate_performance(self, start_date=None, end_date=None, used_for_calibration=True):
+        for metric in self.metrics:
+            # first, not used_for_calibration --> determine all metrices, also those not used for calibration
+            # OR calculate those metrics used for calibration
+            if not used_for_calibration or metric.used_for_calibration:
+                metric.set_db_connection(self.db_connection)
+                start_time, end_time = get_start_and_end_times(start_date, end_date)
+                metric.calculate_result(start_time=start_time, end_time=end_time)
 
-        pivot_results = {}
-
-        for metric_result in metric_results:
-            _type = metric_result["ecdf_type"]
-            metrics = metric_result["metrics"]
-            df_metrics = pd.DataFrame(metrics)
-            mean_df_metrics = df_metrics.mean()
-            mean_dict = mean_df_metrics.to_dict()
-            pivot_results[_type] = mean_dict
-
-        return pivot_results
-
-    def get_ecdf_types(self):
-        ecdf_types = []
-        for ecdf_wrapper in self.ecdf_wrappers:
-            ecdf_types.append(ecdf_wrapper.get_ecdf_type())
-        return ecdf_types
-
-    def get_metric_names(self, ecdf_type: Optional[str] = None):
-        metrics = {}
-        for ecdf_wrapper in self.ecdf_wrappers:
-            _type = ecdf_wrapper.get_ecdf_type()
-            if ecdf_type is None or ecdf_type == _type:
-                metrics[_type] = ecdf_wrapper.get_metrics()
+    def get_metric_names(self):
+        metrics = []
+        for metric in self.metrics:
+            metrics.append(metric.get_name())
         return metrics
+
+    def get_measure_names(self, metric_name: Optional[str] = None):
+        measures = {}
+        for metric in self.metrics:
+            if metric_name is None or metric_name == metric.get_name():
+                measures[metric.get_name()] = metric.get_measures()
+        return measures
+
+    def retrieve_mean_of_measures(self, metric_name: Optional[str] = None):
+        pivot_results = {}
+        for metric in self.metrics:
+            if metric_name is None or metric_name == metric.get_name():
+                name = metric.get_name()
+                measure_results = metric.get_measure_results()
+                if measure_results is not None:
+                    pivot_results[name] = measure_results
+        return pivot_results

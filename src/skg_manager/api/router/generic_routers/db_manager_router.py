@@ -1,7 +1,7 @@
 from colorama import Fore
 from neo4j.exceptions import ServiceUnavailable
 
-from .. import extract_list_of_route_data
+from ..route_data_extractors import extract_list_of_route_data
 from ....generic.service_interfaces.skg_helper_interface import SKGDatabaseHelperInterface
 from ..interface_routers.db_manager_router_interface import DatabaseManagerRouterInterface
 from ..router_result import Result

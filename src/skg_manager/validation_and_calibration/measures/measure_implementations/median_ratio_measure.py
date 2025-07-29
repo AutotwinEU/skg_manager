@@ -1,9 +1,9 @@
-from ..metric_interfaces import MetricInterface
+from ..measure_interfaces import MeasureInterface
 from ...ecdfs import ECDF
 
 
 
-class MedianRatioMetric(MetricInterface):
+class MedianRatioMeasure(MeasureInterface):
 
     # compares two eCDFs for performance_library based on their ratio for a certain probability
     # -1 means the second eCDF performs superior

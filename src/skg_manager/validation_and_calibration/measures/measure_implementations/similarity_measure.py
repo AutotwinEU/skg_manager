@@ -1,11 +1,10 @@
 from scipy.stats import stats
 
-from ..metric_interfaces import MetricInterface
+from ..measure_interfaces import MeasureInterface
 from ...ecdfs import ECDF
 
 
-
-class SimilarityMetric(MetricInterface):
+class SimilarityMeasure(MeasureInterface):
     def calculate(self, gt_dist: ECDF, sim_dist: ECDF):
         difference = stats.wasserstein_distance(gt_dist.get_values(), sim_dist.get_values())
 

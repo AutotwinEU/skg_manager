@@ -60,8 +60,8 @@ def getenv_bool(name: str, default_value: bool | None = None) -> bool:
 
 
 class SKGApp:
-    def __init__(self, test_config=None):
-        self._app = Flask(__name__)
+    def __init__(self, static_folder, template_folder, test_config=None):
+        self._app = Flask(__name__, static_folder=static_folder, template_folder=template_folder)
         cors = CORS(self._app)
         self._set_up_config()
         self._set_test_config(test_config=test_config)
