@@ -13,6 +13,7 @@ class MetricInterface(ABC):
         self.result = None
         self.html_content = None
         self.db_connection = None
+        self.used_for_calibration = used_for_calibration
 
     ####################
     # Abstract Methods #
