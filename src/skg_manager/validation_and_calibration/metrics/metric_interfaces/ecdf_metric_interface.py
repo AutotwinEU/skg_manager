@@ -14,8 +14,8 @@ error_message = "No database connection found, have you set it?"
 
 
 class EcdfMetricInterface(MetricInterface, ABC):
-    def __init__(self, name: str, measures: List[MeasureInterface]):
-        super().__init__(name=name, measures=measures)
+    def __init__(self, name: str, measures: List[MeasureInterface], used_for_calibration=True):
+        super().__init__(name=name, measures=measures, used_for_calibration=used_for_calibration)
 
     # Implement Abstract Methods of MetricInterface
     def calculate_result(self, start_time, end_time):
@@ -52,13 +52,14 @@ class EcdfMetricInterface(MetricInterface, ABC):
     def generate_html_content(self):
         self.html_content = f"<h2>Ecdf for {self.get_name()}</h2>\n"
         for index, ecdf_pairing in enumerate(self.result.values()):
-            ecdf_pairing.plot_to_file("static/figures", show=False)
+            working_dir = f"static/figures/{self.get_name()}"
+            ecdf_pairing.plot_to_file(working_dir, show=False)
             ecdf_data = ecdf_pairing.get_distribution_characteristics_table()
             conformance_data = ecdf_pairing.get_measure_comparison_table()
             self.html_content += f'''
                 <h4 id='eCDF {index}'> {self.get_name()}: {ecdf_pairing.return_title()} </h4>
                 
-                <img src='../static/figures/{ecdf_pairing.return_title()}.svg'><a href='#top'>back to top</a><br><br>
+                <img src='../{working_dir}/{ecdf_pairing.return_title()}.svg'><a href='#top'>back to top</a><br><br>
                 Aggregate values:<br>
                 {ecdf_data.to_html(index=False, justify="left")}'''
 
