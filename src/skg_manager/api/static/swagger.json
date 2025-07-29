@@ -584,6 +584,14 @@
             "required": false,
             "type": "string",
             "format": "date"
+          },
+          {
+            "name": "used_for_calibration",
+            "in": "query",
+            "description": "whether the performance is used for calibration. In that case, it will only calculate the metrics relevant for calibration and exclude the validation metrics.",
+            "required": false,
+            "type": "boolean",
+            "default": true
           }
         ],
         "responses": {
@@ -670,7 +678,7 @@
         }
       }
     },
-    "/performance/get_mean_metric_results": {
+    "/performance/get_mean_of_measures": {
       "get": {
         "tags": [
           "Performance"
