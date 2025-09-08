@@ -18,12 +18,8 @@ class ValidationAndCalibrationService(ValidationAndCalibrationServiceInterface):
         self.tabs = []
 
     def render_validation_template(self) -> str:
-        start_time, end_time = get_start_and_end_times()
         metric_results = []
         for metric in self.metrics:
-            if not metric.has_result():  # calculate results if not defined
-                metric.set_db_connection(self.db_connection)
-                metric.calculate_result(start_time=start_time, end_time=end_time)
             metric_results.append(metric.get_dict_repr())
 
         return render_template('performance_results.html',
@@ -55,6 +51,7 @@ class ValidationAndCalibrationService(ValidationAndCalibrationServiceInterface):
         pivot_results = {}
         for metric in self.metrics:
             if metric_name is None or metric_name == metric.get_name():
+                print(f"I'm here: {metric.get_name()}")
                 name = metric.get_name()
                 measure_results = metric.get_measure_results()
                 if measure_results is not None:
