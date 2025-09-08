@@ -8,7 +8,8 @@ class ValidationAndCalibrationServiceInterface(ABC):
         pass
 
     @abstractmethod
-    def calculate_performance(self, start_date: Optional[str] = None, end_date: Optional[str] = None):
+    def calculate_performance(self, start_date: Optional[str] = None, end_date: Optional[str] = None,
+                              used_for_calibration: bool = True):
         pass
 
     @abstractmethod

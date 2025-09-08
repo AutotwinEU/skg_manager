@@ -47,6 +47,11 @@ class MetricInterface(ABC):
         return self.name
 
     def get_html_content(self):
+        if self.result is None:
+            return (f"No results has been generated for metric {self.name}. <br><br> "
+                    f"Try to generate results using one of the following options"
+                    f"<ul> <li>by pressing <span style='color: #ff804b'>Generate twin performance statistics</span> in the Orchestrator </li>"
+                    f"<li> by running <span style='color: #ff804b'>/performance/run</span> via the swagger of the SKG manager.</li></ul>")
         if self.html_content is None:
             self.generate_html_content()
         return self.html_content
