@@ -5,6 +5,18 @@ from ..interface_routers.performance_router_interface import PerformanceRouterIn
 from ..router_result import Result
 
 
+def to_bool(value):
+    if isinstance(value, bool):
+        return value
+    if isinstance(value, str):
+        value = value.lower()
+        if value in ("true", "yes", "1"):
+            return True
+        elif value in ("false", "no", "0"):
+            return False
+    raise ValueError(f"Cannot convert {value} to boolean")
+
+
 class PerformanceRouter(PerformanceRouterInterface):
     def __init__(self, validation_and_calibration_service: ValidationAndCalibrationServiceInterface):
         self.vc_service = validation_and_calibration_service
@@ -16,7 +28,8 @@ class PerformanceRouter(PerformanceRouterInterface):
         start_date = route_data['start_date'] if 'start_date' in route_data else None
         end_date = route_data['end_date'] if 'end_date' in route_data else None
         # default is used for calibration
-        used_for_calibration = route_data['used_for_calibration'] if 'used_for_calibration' in route_data else True
+        used_for_calibration = to_bool(
+            route_data['used_for_calibration']) if 'used_for_calibration' in route_data else True
         try:
             self.vc_service.calculate_performance(start_date, end_date, used_for_calibration)
             return Result(status=Result.Status.SUCCESS,
