@@ -29,7 +29,7 @@ class ValidationAndCalibrationService(ValidationAndCalibrationServiceInterface):
         for metric in self.metrics:
             # first, not used_for_calibration --> determine all metrices, also those not used for calibration
             # OR calculate those metrics used for calibration
-            if not used_for_calibration or metric.used_for_calibration:
+            if (not used_for_calibration) or metric.used_for_calibration:
                 metric.set_db_connection(self.db_connection)
                 start_time, end_time = get_start_and_end_times(start_date, end_date)
                 metric.calculate_result(start_time=start_time, end_time=end_time)
