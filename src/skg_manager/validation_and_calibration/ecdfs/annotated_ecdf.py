@@ -82,6 +82,7 @@ class AnnotatedECDF(ECDF):
         return {
             'source': self.get_gt_sim(),
             'entity_type': self.get_entity_type(),
+            'sample size': self.get_sample_size(),
             'min': self.get_min_value(), 'max': self.get_max_value(),
             'mean': self.get_avg_value(), 'median': self.get_median_value()
         }
