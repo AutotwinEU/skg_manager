@@ -21,7 +21,7 @@ class PerformanceRouter(PerformanceRouterInterface):
     def __init__(self, validation_and_calibration_service: ValidationAndCalibrationServiceInterface):
         self.vc_service = validation_and_calibration_service
 
-    def on_show_results(self) -> Response:
+    def on_show_results(self) -> str:
         return self.vc_service.render_validation_template()
 
     def on_calculate_performance(self, route_data) -> Result:
