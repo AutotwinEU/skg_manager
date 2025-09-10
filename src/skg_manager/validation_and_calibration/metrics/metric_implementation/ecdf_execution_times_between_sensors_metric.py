@@ -10,9 +10,43 @@ from ...measures.measure_implementations import (KolmogorovMeasure, MedianRatioM
 from ..metric_interfaces.ecdf_metric_interface import EcdfMetricInterface
 
 
+def get_time_unit(_input: str, default: str = "seconds") -> str:
+    # Map abbreviations to full names
+    unit_map = {
+        "s": "seconds",
+        "sec": "seconds",
+        "m": "minutes",
+        "min": "minutes",
+        "h": "hours",
+        "hr": "hours",
+        "d": "days",
+    }
+    valid_units = set(unit_map.values()).union(set(unit_map.keys()))
+    _input = _input.strip().lower()
+
+    if _input in valid_units:
+        # Return the full name if it's an abbreviation
+        # if not abbreviation, then return user_input as default value.
+        return unit_map.get(_input, _input)
+    else:
+        print(f"Warning: '{_input}' is not a valid time unit. Using default: '{default}'.")
+        return default
+
+
+def get_conversion_factor(unit: str) -> float:
+    conversion_factors = {
+        "seconds": 1,
+        "minutes": 60,
+        "hours": 3600,
+        "days": 86400
+    }
+    return conversion_factors.get(unit, 1)  # Default to seconds if unknown
+
+
 class ExecutionTimesBetweenSensorsEcdfMetric(EcdfMetricInterface):
-    def __init__(self, measures: Optional[List[MeasureInterface]] = None):
-        name = "Execution Times Between Sensors"
+    def __init__(self, measures: Optional[List[MeasureInterface]] = None, time_unit: str = 'seconds'):
+        self.time_unit = get_time_unit(_input=time_unit)
+        name = f"Execution Times Between Sensors (in {self.time_unit})"
         if measures is None:
             measures = [KolmogorovMeasure(), MedianRatioMeasure(), SimilarityMeasure(),
                         WassersteinDistanceMeasure(), AverageDifferenceMeasure(), MedianDifferenceMeasure(),
@@ -35,7 +69,7 @@ class ExecutionTimesBetweenSensorsEcdfMetric(EcdfMetricInterface):
         :param end_time: end time of interval formatted as "yyyy-MM-dd HH:mm:ss"
         :return: Query object that finds a list of numerical values
         """
-
+        conversion_factor = get_conversion_factor(self.time_unit)
         query_str = '''
             MATCH (e1:Event) - [r:DF_CONTROL_FLOW_ITEM] -> (e2)
             WHERE e1.simulated = True OR 
@@ -47,12 +81,13 @@ class ExecutionTimesBetweenSensorsEcdfMetric(EcdfMetricInterface):
             MATCH (s1)-->(connection:Connection)-->(s2)
             WITH elementId(connection) as element_id, s1.simulated is not null as is_simulated_data, s1.sysId as 
             input_sensor, s2.sysId as output_sensor, et.entityType as entity_type, 
-            COLLECT(duration.inSeconds(e1.timestamp, e2.timestamp).seconds) as times
+            COLLECT(duration.inSeconds(e1.timestamp, e2.timestamp).seconds/$conversion_factor) as times
             RETURN element_id, entity_type, is_simulated_data, input_sensor+"-"+output_sensor+"-"+entity_type as key, 
             times as dist_values
             '''
         return Query(query_str=query_str,
                      parameters={
                          "start_time": start_time,
-                         "end_time": end_time
+                         "end_time": end_time,
+                         "conversion_factor": conversion_factor
                      })
