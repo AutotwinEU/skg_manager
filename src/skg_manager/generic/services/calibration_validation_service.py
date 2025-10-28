@@ -32,6 +32,7 @@ class ValidationAndCalibrationService(ValidationAndCalibrationServiceInterface):
             if (not used_for_calibration) or metric.used_for_calibration:
                 metric.set_db_connection(self.db_connection)
                 start_time, end_time = get_start_and_end_times(start_date, end_date)
+                metric.clear_result()  # ensure that the result is cleared before calculating new results
                 metric.calculate_result(start_time=start_time, end_time=end_time)
 
     def get_metric_names(self):
