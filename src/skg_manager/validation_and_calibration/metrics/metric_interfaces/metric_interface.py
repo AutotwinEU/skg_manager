@@ -52,8 +52,7 @@ class MetricInterface(ABC):
                     f"Try to generate results using one of the following options"
                     f"<ul> <li>by pressing <span style='color: #ff804b'>Generate twin performance statistics</span> in the Orchestrator </li>"
                     f"<li> by running <span style='color: #ff804b'>/performance/run</span> via the swagger of the SKG manager.</li></ul>")
-        if self.html_content is None:
-            self.generate_html_content()
+        self.generate_html_content()
         return self.html_content
 
     def get_dict_repr(self):
