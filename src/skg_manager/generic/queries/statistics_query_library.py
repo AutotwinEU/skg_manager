@@ -18,22 +18,37 @@ class StatisticsQueryLibrary:
         return Query(query_str=query_str)
 
     @staticmethod
-    def get_time_span_of_ground_truth_records_query():
+    def get_time_span_of_ground_truth_records_query(is_unix: bool = False):
+        unix_convert_str = ''
+        if is_unix:
+            unix_convert_str = '''WITH datetime({epochMillis: start_time}) AS start_time, 
+                                            datetime({epochMillis: end_time}) AS end_time'''
+
         query_str = '''
             MATCH (l:Log) - [:CONTAINS] -> (r:Record)
             WHERE NOT l.name CONTAINS "sim"
             WITH min(r.timestamp) as start_time, max(r.timestamp) as end_time
+            $unix_convert_str
             WITH date(start_time) as start_date, date(end_time) as end_date
             RETURN toString(start_date) as start_date, toString(end_date) as end_date
         '''
 
-        return Query(query_str=query_str)
+        return Query(query_str=query_str,
+                     template_string_parameters={
+                         'unix_convert_str': unix_convert_str
+                     })
 
     @staticmethod
-    def get_time_span_query():
+    def get_time_span_query(is_unix: bool = False):
+        unix_convert_str = ''
+        if is_unix:
+            unix_convert_str = '''WITH sensorId, datetime({epochMillis: start_time}) AS start_time, 
+                                    datetime({epochMillis: end_time}) AS end_time'''
+
         query_str = '''
-            MATCH (e:Event) - [:EXECUTED_BY] -> (s:Sensor)
+            MATCH (e:Event) - [] -> (s:Sensor)
             WITH s.sysId as sensorId, min(e.timestamp) as start_time, max(e.timestamp) as end_time order by sensorId
+            $unix_convert_str
             WITH date(max(start_time)) as start_date, date(min(end_time)) as end_date
             WITH datetime({year:start_date.year, month:start_date.month, day:start_date.day, hour:0, minute:0, 
             second:0}) as start_datetime,
@@ -42,7 +57,10 @@ class StatisticsQueryLibrary:
             RETURN toString(start_datetime) as start_date, toString(end_datetime) as end_date
         '''
 
-        return Query(query_str=query_str)
+        return Query(query_str=query_str,
+                     template_string_parameters={
+                         'unix_convert_str': unix_convert_str
+                     })
 
     @staticmethod
     def get_node_count_query() -> Query:
