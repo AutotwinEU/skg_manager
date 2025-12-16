@@ -11,7 +11,8 @@ from ..service_interfaces.skg_helper_interface import SKGDatabaseHelperInterface
 
 class SKGDatabaseHelper(DBManagement, SKGDatabaseHelperInterface):
 
-    def __init__(self, db_connection: DatabaseConnection, semantic_header=None):
+    def __init__(self, db_connection: DatabaseConnection, semantic_header=None, in_unix_time: bool = False):
+        self.in_unix_time = in_unix_time
         super().__init__(db_connection, semantic_header)
 
     def test_connection(self):
@@ -42,11 +43,13 @@ class SKGDatabaseHelper(DBManagement, SKGDatabaseHelperInterface):
         return result
 
     def get_timespan(self):
-        result = self.connection.exec_query(sql.get_time_span_query)
+        result = self.connection.exec_query(sql.get_time_span_query,
+                                            **{'is_unix': self.in_unix_time})
         return result
 
     def get_ground_truth_records_time_span(self):
-        result = self.connection.exec_query(sql.get_time_span_of_ground_truth_records_query)
+        result = self.connection.exec_query(sql.get_time_span_of_ground_truth_records_query,
+                                            **{'is_unix': self.in_unix_time})
         return result
 
     def get_statistics(self) -> List[Dict[str, any]]:
